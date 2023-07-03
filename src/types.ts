@@ -10,6 +10,7 @@ export interface Prescription {
     drugName: string
     refills: number
     status: PrescriptionStatus
+    userId: string
 }
 
 // is this an interface or type?

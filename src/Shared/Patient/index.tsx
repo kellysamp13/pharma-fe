@@ -1,10 +1,10 @@
 import { Navigate, useParams } from 'react-router-dom'
 import useSwr from 'swr'
-import {useState} from 'react'
+// import {useState} from 'react'
 import AddPrescriptionForm from '../../DoctorMain/Forms/AddPrescriptionForm';
 import { Prescription } from '../../types';
 import { getPatientFetcher, updatePatientFetcher } from './apiCalls'
-import CreatePatientForm from '../../DoctorMain/Forms/CreatePatientForm';
+// import CreatePatientForm from '../../DoctorMain/Forms/CreatePatientForm';
 
 const PatientView = () => {
     const params = useParams()

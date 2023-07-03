@@ -5,22 +5,24 @@ import { useParams } from 'react-router-dom'
 
 const AddPrescriptionForm = () => {
     // const [prescriptions, setPrescriptions] = useState<Prescription[] | null>(null)
+    const params = useParams()
+
     const [prescriptions, setPrescriptions] = useState<Prescription>({
         status: PrescriptionStatus.IN_PROGRESS,
         refills: 0,
         drugName: '',
+        userId: String(params.id || ''),
     })
-    const params = useParams()
 
     const fetcher = (url: string) => fetch(url,
         {
-            method: 'PUT',
+            method: 'POST',
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ prescriptions })
         }).then(res => res.json())
 
         const [shouldPost, setShouldPost] = useState<boolean>(false)
-        const { data, error } = useSwr(shouldPost ? `http://localhost:4000/patients/${params.id}/edit` : null, fetcher)
+        const { data, error } = useSwr(shouldPost ? `http://localhost:4000/prescriptions` : null, fetcher)
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
@@ -49,7 +51,8 @@ const AddPrescriptionForm = () => {
                 />
             </div>
 
-            <div className="mb-4 flex justify-between">
+            {/* HARD CODED FOR DOCTORS */}
+            {/* <div className="mb-4 flex justify-between">
                 <label className="mr-3" htmlFor="status">Fulfillment Status</label>
                 <select
                     className="w-[50%]"
@@ -62,7 +65,7 @@ const AddPrescriptionForm = () => {
                     <option>{PrescriptionStatus.PENDING}</option>
                     <option>{PrescriptionStatus.FILLED}</option>
                 </select>
-            </div>
+            </div> */}
 
             <div className="mb-6 flex justify-between">
                 <label className="mr-3" htmlFor="refills">Number of refills</label>

@@ -2,9 +2,9 @@ import React, { useState } from 'react'
 import { Patient } from '../../types'
 import useSwr from 'swr'
 import { Navigate } from 'react-router-dom'
-import {createPatientFetcher} from '../../Shared/Patient/apiCalls'
+// import {createPatientFetcher} from '../../Shared/Patient/apiCalls'
 
-const CreatePatientForm = ({ buttonText = 'Create New Patient Account', fetcher = createPatientFetcher, url = 'http://localhost:4000/patients' }) => {
+const CreatePatientForm = () => {
     const [formData, setFormData] = useState<Patient>({
         email: '',
         firstName: '',
@@ -13,8 +13,15 @@ const CreatePatientForm = ({ buttonText = 'Create New Patient Account', fetcher 
         phone: '',
         prescriptions: [],
     })
+    const createPatientFetcher = (url: string) => fetch(url,
+        {
+            method: 'POST',
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(formData)
+        }).then(res => res.json())
+
     const [shouldPost, setShouldPost] = useState<boolean>(false)
-    const { data, error } = useSwr(shouldPost ? url : null, fetcher)
+    const { data, error } = useSwr(shouldPost ? 'http://localhost:4000/patients' : null, createPatientFetcher)
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({...formData, [e.target.name]: e.target.value})
@@ -29,6 +36,7 @@ const CreatePatientForm = ({ buttonText = 'Create New Patient Account', fetcher 
 
     // const disableSubmit = !formData.email || !formData.firstName || !formData.lastName || !formData.email || !formData.phone
     const disableSubmit = false
+    const isRequired = true
 
     if (data?.id) {
         return <Navigate to={`/patients/${data.id}`}/>
@@ -49,7 +57,7 @@ const CreatePatientForm = ({ buttonText = 'Create New Patient Account', fetcher 
                     name="firstName"
                     onChange={handleChange}
                     placeholder="Enter First Name"
-                    required
+                    required={isRequired}
                     type="text"
                     value={formData.firstName}
                 />
@@ -63,7 +71,7 @@ const CreatePatientForm = ({ buttonText = 'Create New Patient Account', fetcher 
                     name="lastName"
                     onChange={handleChange}
                     placeholder="Enter Last Name"
-                    required
+                    required={isRequired}
                     type="text"
                     value={formData.lastName}
                 />
@@ -77,7 +85,7 @@ const CreatePatientForm = ({ buttonText = 'Create New Patient Account', fetcher 
                     name="lastAppointment"
                     // it looks like: 2023-06-13
                     onChange={handleChange}
-                    required
+                    required={isRequired}
                     type="date"
                     value={formData.lastAppointment}
                 />
@@ -93,7 +101,7 @@ const CreatePatientForm = ({ buttonText = 'Create New Patient Account', fetcher 
                     name="phone"
                     onChange={handleChange}
                     placeholder="Enter phone number"
-                    required
+                    required={isRequired}
                     type="tel"
                     value={formData.phone}
                 />
@@ -108,7 +116,7 @@ const CreatePatientForm = ({ buttonText = 'Create New Patient Account', fetcher 
                     id="email"
                     name="email"
                     onChange={handleChange}
-                    required
+                    required={isRequired}
                     type="email"
                     value={formData.email}
                 />
@@ -120,7 +128,7 @@ const CreatePatientForm = ({ buttonText = 'Create New Patient Account', fetcher 
                     disabled={disableSubmit}
                     type="submit"
                 >
-                    {buttonText}
+                    Create New Patient Account
                 </button>
                 <button
                     className={`px-4 py-1 w-[40%] mt-2 font-bold rounded text-white ${disableSubmit ? 'bg-slate-300' : 'bg-rose-600'}`}

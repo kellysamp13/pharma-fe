@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.css'
-import CreatePatientForm from "./DoctorMain/Forms/CreatePatientForm"
+import CreatePatient from "./DoctorMain/CreatePatient"
 import DoctorMain from './DoctorMain';
 import PatientView from './Shared/Patient'
 import {Link} from 'react-router-dom'
@@ -28,7 +28,7 @@ function App() {
         </div>
         <Routes>
           <Route path='/' element={<DoctorMain/>}/>
-          <Route path='/addpatient' element={<CreatePatientForm />}/>
+          <Route path='/addpatient' element={<CreatePatient />}/>
           <Route path='/patients/:id' element={<PatientView />}/>
         </Routes>
       </BrowserRouter>

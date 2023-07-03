@@ -11,7 +11,7 @@ const PatientView = () => {
     const { data: patientData, error, isLoading } = useSwr(`http://localhost:4000/patients/${params.id}`, getPatientFetcher)
     const { data } = useSwr(`http://localhost:4000/patients/${params.id}`, updatePatientFetcher)
 
-    const [showModal, setShowModal] = useState<boolean>(false)
+    // const [showModal, setShowModal] = useState<boolean>(false)
 
     if (isLoading) {
         return <div>Loading...</div>
@@ -23,9 +23,9 @@ const PatientView = () => {
 
     return (
         <div className="py-10 px-20 bg-white w-[90%] mx-auto p-6 rounded my-10">
-            {!showModal && <div className="absolute z-10 bg-slate-100 h-[60%] w-[50%] top-0 border border-black">
+            {/* {!showModal && <div className="absolute z-10 bg-slate-100 h-[60%] w-[50%] top-0 border border-black">
                 <CreatePatientForm buttonText="Update Patient" fetcher={updatePatientFetcher} url={`http://localhost:4000/patients/${params.id}`} />
-            </div>}
+            </div>} */}
             <div className="flex">
                 <h3 className="font-bold text-lg my-4 mr-10">
                     Patient Info

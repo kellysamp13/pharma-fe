@@ -1,41 +1,13 @@
-import React, { useState } from 'react'
-import { Prescription, PrescriptionStatus } from '../../types'
-import useSwr from 'swr'
-import { useParams } from 'react-router-dom'
+import { PrescriptionStatus } from "../../types"
 
-const AddPrescriptionForm = () => {
-    // const [prescriptions, setPrescriptions] = useState<Prescription[] | null>(null)
-    const params = useParams()
-
-    const [prescriptions, setPrescriptions] = useState<Prescription>({
-        status: PrescriptionStatus.IN_PROGRESS,
-        refills: 0,
-        drugName: '',
-        userId: String(params.id || ''),
-        id: '',
-    })
-
-    const fetcher = (url: string) => fetch(url,
-        {
-            method: 'POST',
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ prescriptions })
-        }).then(res => res.json())
-
-        const [shouldPost, setShouldPost] = useState<boolean>(false)
-        const { data, error } = useSwr(shouldPost ? `http://localhost:4000/prescriptions` : null, fetcher)
-
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault()
-        setShouldPost(true)
-    }
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        // don't trim until we post it
-        // update local state
-        setPrescriptions({...prescriptions, [e.target.name]: e.target.value.trim()})
-    }
-
-    const disableSubmit = !prescriptions.drugName
+interface Props {
+    handleChange: any
+    handleSubmit: any
+    data: any
+}
+const AddPrescriptionForm = ({ handleChange, handleSubmit, data }: Props) => {
+    const disableSubmit = !data.drugName
+    const isProviderView = sessionStorage.getItem('viewType') === 'provider'
 
     return (
         <form className="" onSubmit={(e) => handleSubmit(e)}>
@@ -48,25 +20,27 @@ const AddPrescriptionForm = () => {
                     name="drugName"
                     onChange={handleChange}
                     type="text"
-                    value={prescriptions.drugName}
+                    value={data.drugName}
                 />
             </div>
 
-            {/* HARD CODED FOR DOCTORS */}
-            {/* <div className="mb-4 flex justify-between">
-                <label className="mr-3" htmlFor="status">Fulfillment Status</label>
-                <select
-                    className="w-[50%]"
-                    id="status"
-                    name="status"
-                    onChange={handleChange}
-                    value={prescriptions.status}
-                >
-                    <option>{PrescriptionStatus.IN_PROGRESS}</option>
-                    <option>{PrescriptionStatus.PENDING}</option>
-                    <option>{PrescriptionStatus.FILLED}</option>
-                </select>
-            </div> */}
+            {/* Only allow Pharmacists to edit this */}
+            {!isProviderView  ?  (
+                <div className="mb-4 flex justify-between">
+                    <label className="mr-3" htmlFor="status">Fulfillment Status</label>
+                    <select
+                        className="w-[50%]"
+                        id="status"
+                        name="status"
+                        onChange={handleChange}
+                        value={data.status}
+                    >
+                        <option>{PrescriptionStatus.IN_PROGRESS}</option>
+                        <option>{PrescriptionStatus.PENDING}</option>
+                        <option>{PrescriptionStatus.FILLED}</option>
+                    </select>
+                </div>
+            ) : null}
 
             <div className="mb-6 flex justify-between">
                 <label className="mr-3" htmlFor="refills">Number of refills</label>
@@ -76,7 +50,7 @@ const AddPrescriptionForm = () => {
                     name="refills"
                     onChange={handleChange}
                     type="number"
-                    value={prescriptions.refills}
+                    value={data.refills}
                     min={0}
                 />
             </div>

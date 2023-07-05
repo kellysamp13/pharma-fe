@@ -12,6 +12,7 @@ const AddPrescriptionForm = () => {
         refills: 0,
         drugName: '',
         userId: String(params.id || ''),
+        id: '',
     })
 
     const fetcher = (url: string) => fetch(url,

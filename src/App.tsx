@@ -4,30 +4,35 @@ import CreatePatient from "./DoctorMain/CreatePatient"
 import DoctorMain from './DoctorMain';
 import PatientView from './Shared/Patient'
 import {Link} from 'react-router-dom'
+import PharmacistMain from './PharmacistMain';
+import { useState } from 'react'
 
 // As a provider, I should be able to
-// * create new patients
-// * write prescriptions for these patients
-// * see my other patients
-// * the status of their previously written prescriptions
-
-// ui to create a new patient - option to add prescription or leave blank /POST
-// ui to update a patient - add, update, remove prescription /PATCH or /POST
-// ui to see all patients and their prescriptions - search, filter? /GET
-// imagining this as one doctor logged in - but do I need to create some sort of doctor/pharma account in the api?
-
+// * see all prescriptions
+// * edit prescription filled state
+// * see my other patients?
 
 function App() {
+  const [viewType, setViewType] = useState<string>(sessionStorage.getItem('viewType') || 'provider')
+
   return (
     <div>
       <BrowserRouter>
         <div className="flex justify-between bg-white px-10 py-3">
           <Link className='px-4 py-1 font-bold rounded text-white bg-teal-600' to='/addpatient'>Add a new patient</Link>
           <Link className='px-4 py-1 font-bold rounded text-white bg-teal-600' to='/'>View all patients</Link>
-          <button className='px-4 py-1 font-bold rounded text-white bg-teal-600'>Change to pharm view</button>
+          <button
+            onClick={() => {
+              const newView = viewType === 'provider' ? 'pharmacist' : 'provider'
+              sessionStorage.setItem('viewType', newView)
+              setViewType(newView)
+            }}
+            className='px-4 py-1 font-bold rounded text-white bg-teal-600'>
+              Change to {viewType === 'provider' ? 'pharmacist' : 'provider'} view
+            </button>
         </div>
         <Routes>
-          <Route path='/' element={<DoctorMain/>}/>
+          <Route path='/' element={viewType === 'provider' ? <DoctorMain/> : <PharmacistMain />}/>
           <Route path='/addpatient' element={<CreatePatient />}/>
           <Route path='/patients/:id' element={<PatientView />}/>
         </Routes>

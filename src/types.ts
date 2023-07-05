@@ -7,10 +7,12 @@ export enum PrescriptionStatus {
 }
 
 export interface Prescription {
+    // rename to just name
     drugName: string
     refills: number
     status: PrescriptionStatus
     userId: string
+    id: string
 }
 
 // is this an interface or type?

@@ -6,23 +6,22 @@ interface Props {
     data: any
 }
 const AddPrescriptionForm = ({ handleChange, handleSubmit, data }: Props) => {
-    const disableSubmit = !data.drugName
+    const disableSubmit = !data.name
     const isProviderView = sessionStorage.getItem('viewType') === 'provider'
 
     return (
         <form className="" onSubmit={(e) => handleSubmit(e)}>
-            <h3 className="font-bold text-lg my-4">Add New Prescription</h3>
-            <div className="mb-4 flex justify-between">
-                <label className="mr-3" htmlFor="drugName">Prescription Name</label>
+            {isProviderView ? <div className="mb-4 flex justify-between">
+                <label className="mr-3" htmlFor="name">Prescription Name</label>
                 <input
                     className="w-[50%]"
-                    id="drugName"
-                    name="drugName"
+                    id="name"
+                    name="name"
                     onChange={handleChange}
                     type="text"
-                    value={data.drugName}
+                    value={data.name}
                 />
-            </div>
+            </div> : <div>Prescription name: {data.name}</div>}
 
             {/* Only allow Pharmacists to edit this */}
             {!isProviderView  ?  (
@@ -42,7 +41,7 @@ const AddPrescriptionForm = ({ handleChange, handleSubmit, data }: Props) => {
                 </div>
             ) : null}
 
-            <div className="mb-6 flex justify-between">
+            {isProviderView ? <div className="mb-6 flex justify-between">
                 <label className="mr-3" htmlFor="refills">Number of refills</label>
                 <input
                     className="w-[50%]"
@@ -53,7 +52,7 @@ const AddPrescriptionForm = ({ handleChange, handleSubmit, data }: Props) => {
                     value={data.refills}
                     min={0}
                 />
-            </div>
+            </div> : null}
             {/* would they want to add more than 1 prescription? */}
             {/* <button
                 className={`px-4 py-1 font-bold rounded ${disableSubmit ? 'bg-slate-300' : 'text-teal-600 border border-teal-600'}`}

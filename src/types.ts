@@ -8,7 +8,7 @@ export enum PrescriptionStatus {
 
 export interface Prescription {
     // rename to just name
-    drugName: string
+    name: string
     refills: number
     status: PrescriptionStatus
     userId: string

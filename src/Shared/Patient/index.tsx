@@ -1,17 +1,15 @@
 import { Navigate, useParams } from 'react-router-dom'
 import useSwr from 'swr'
-import {useState} from 'react'
+import { useState } from 'react'
 import { getPatientFetcher } from './apiCalls'
 import PrescriptionSection from './PrescriptionSection'
 import EditPatientModal from '../EditPatientModal';
 
 const PatientView = () => {
-    const [showModal, setShowModal] = useState<boolean>(false)
-    // const { data: user } = useSWR(['/api/user', token], ([url, token]) => fetchWithToken(url, token))
-    // const { data: orders } = useSWR(user ? ['/api/orders', user] : null, fetchWithUser)
     const params = useParams()
-    // get request
     const { data: patientData, error, isLoading } = useSwr(`http://localhost:4000/patients/${params.id}`, getPatientFetcher)
+
+    const [showModal, setShowModal] = useState<boolean>(false)
 
     if (isLoading || !patientData) {
         // the submitting behavior is really weird
@@ -39,18 +37,18 @@ const PatientView = () => {
                 </h3>
 
                 <div>
-                <div className="my-2">
-                    <strong>Name: </strong>{patientData.firstName} {patientData.lastName}
-                </div>
-                <div className="my-2">
-                    <strong>Email: </strong>{patientData.email}
-                </div>
-                <div className="my-2">
-                    <strong>Phone number: </strong>{patientData.phone}
-                </div>
-                <div className="my-2">
-                    <strong>Last appointment: </strong> {patientData.lastAppointment}
-                </div>
+                    <div className="my-2">
+                        <strong>Name: </strong>{patientData.firstName} {patientData.lastName}
+                    </div>
+                    <div className="my-2">
+                        <strong>Email: </strong>{patientData.email}
+                    </div>
+                    <div className="my-2">
+                        <strong>Phone number: </strong>{patientData.phone}
+                    </div>
+                    <div className="my-2">
+                        <strong>Last appointment: </strong> {patientData.lastAppointment}
+                    </div>
                 </div>
             </div>
 

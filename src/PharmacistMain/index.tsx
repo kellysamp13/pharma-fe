@@ -14,11 +14,10 @@ const PharmacistMain = () => {
         <div>
             <ul className="bg-white w-[90%] m-auto rounded px-4 mt-4">
                 {data?.map((prescription: Prescription, index: number) => {
-                    console.log(prescription)
                     return (
                         <Link key={prescription.id} to={`/prescriptions/${prescription.id}`}>
                             <li className={`flex justify-between py-3 ${index !== data.length-1 ? 'border-b border-b-black' : ''}`} key={prescription.id}>
-                                <div className="w-1/5">{prescription.drugName}</div>
+                                <div className="w-1/5">{prescription.name}</div>
                                 <div>{prescription.refills}</div>
                                 <div>{prescription.status}</div>
                             </li>

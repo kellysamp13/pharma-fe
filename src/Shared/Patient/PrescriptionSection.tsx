@@ -15,7 +15,7 @@ const PrescriptionSection = ({ patientData }: Props) => {
     const [prescriptions, setPrescriptions] = useState<Prescription>({
         status: PrescriptionStatus.IN_PROGRESS,
         refills: 0,
-        drugName: '',
+        name: '',
         userId: String(params.id || ''),
         id: '',
     })
@@ -39,7 +39,7 @@ const PrescriptionSection = ({ patientData }: Props) => {
         setPrescriptions({...prescriptions, [e.target.name]: e.target.value.trim()})
     }
 
-    const disableSubmit = !prescriptions.drugName
+    const disableSubmit = !prescriptions.name
 
     const { data, isValidating } = useSwr(shouldPost ? [`http://localhost:4000/prescriptions`, prescriptions] : null, ([url, prescriptions]) => fetcher(url, prescriptions))
 
@@ -50,7 +50,7 @@ const PrescriptionSection = ({ patientData }: Props) => {
                 {patientData.activeScripts?.length ? patientData.activeScripts.map((script: Prescription) => {
                     return (
                         <li className="flex justify-between">
-                            <div>{script.drugName}</div>
+                            <div>{script.name}</div>
                             <div>{script.status}</div>
                             <div>Refills: {script.refills}</div>
                             {/* editing means ending refills - not updating any other info */}
@@ -65,7 +65,7 @@ const PrescriptionSection = ({ patientData }: Props) => {
                 {patientData.expiredScripts?.length ? patientData.expiredScripts?.map((script: Prescription) => {
                     return (
                         <li className="flex justify-between">
-                            <div>{script.drugName}</div>
+                            <div>{script.name}</div>
                             <div>{script.status}</div>
                             <div>Refills: {script.refills}</div>
                             {/* editing means ending refills - not updating any other info */}
@@ -75,6 +75,7 @@ const PrescriptionSection = ({ patientData }: Props) => {
                 }): <div>No expired prescriptions.</div>}
             </ul>
 
+            <h3 className="font-bold text-lg my-4">Add New Prescription</h3>
             {/* show this section with a button */}
             <AddPrescriptionForm handleChange={handleChange} handleSubmit={handleSubmit} data={prescriptions} />
         </>

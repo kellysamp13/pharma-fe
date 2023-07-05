@@ -6,21 +6,17 @@ const DoctorMain = () => {
     const fetcher = (url: string) => fetch(url).then((res) => res.json())
     const { data, error, isLoading } = useSwr('http://localhost:4000/patients', fetcher)
 
-    if (isLoading) {
+    if (isLoading || !data) {
         return <div>Loading...</div>
     }
 
     return (
         <div>
-            {/* <div className="flex justify-between bg-white px-10 py-3">
-                <Link className='px-4 py-1 font-bold rounded text-white bg-teal-600' to='/addpatient'>Add a new patient</Link>
-                <button className='px-4 py-1 font-bold rounded text-white bg-teal-600'>Change to pharm view</button>
-            </div> */}
             <ul className="bg-white w-[90%] m-auto rounded px-4 mt-4">
-                {data?.map((patient: Patient) => {
+                {data?.map((patient: Patient, index: number) => {
                     return (
                         <Link key={patient.id} to={`/patients/${patient.id}`}>
-                            <li className="flex justify-between py-3 border-b border-b-black" key={patient.id}>
+                            <li className={`flex justify-between py-3 ${index !== data.length-1 ? 'border-b border-b-black' : ''}`} key={patient.id}>
                                 <div className="w-1/5">{patient.firstName} {patient.lastName}</div>
                                 <div className="w-1/5 break-words">{patient.email}</div>
                                 <div>{patient.phone}</div>

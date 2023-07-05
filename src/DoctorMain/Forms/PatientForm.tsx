@@ -1,50 +1,14 @@
-import React, { useState } from 'react'
-import { Patient } from '../../types'
-import useSwr from 'swr'
-import { Navigate } from 'react-router-dom'
-// import {createPatientFetcher} from '../../Shared/Patient/apiCalls'
+interface Props {
+    handleChange: (arg: any) => void
+    handleSubmit: (arg: any) => void
+    data: any
+    isRequired?: boolean
+}
 
-const CreatePatientForm = () => {
-    const [formData, setFormData] = useState<Patient>({
-        email: '',
-        firstName: '',
-        lastAppointment: '',
-        lastName: '',
-        phone: '',
-        prescriptions: [],
-    })
-    const createPatientFetcher = (url: string) => fetch(url,
-        {
-            method: 'POST',
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(formData)
-        }).then(res => res.json())
-
-    const [shouldPost, setShouldPost] = useState<boolean>(false)
-    const { data, error } = useSwr(shouldPost ? 'http://localhost:4000/patients' : null, createPatientFetcher)
-
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setFormData({...formData, [e.target.name]: e.target.value})
-        // where should we trim
-        // need to handle adding prescription - different handle event?
-    }
-
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault()
-        setShouldPost(true)
-    }
-
-    // const disableSubmit = !formData.email || !formData.firstName || !formData.lastName || !formData.email || !formData.phone
+const PatientForm = ({ isRequired = false, data, handleChange, handleSubmit }: Props) => {
     const disableSubmit = false
-    const isRequired = true
-
-    if (data?.id) {
-        return <Navigate to={`/patients/${data.id}`}/>
-    }
 
     return (
-        // this div should be the page style
-        // <div className="pt-10">
         <form className="mx-auto p-6 rounded" onSubmit={(e) => handleSubmit(e)}>
 
             <h3 className="font-bold text-lg mb-4">Patient Information</h3>
@@ -59,7 +23,7 @@ const CreatePatientForm = () => {
                     placeholder="Enter First Name"
                     required={isRequired}
                     type="text"
-                    value={formData.firstName}
+                    value={data.firstName}
                 />
             </div>
 
@@ -73,7 +37,7 @@ const CreatePatientForm = () => {
                     placeholder="Enter Last Name"
                     required={isRequired}
                     type="text"
-                    value={formData.lastName}
+                    value={data.lastName}
                 />
             </div>
 
@@ -87,7 +51,7 @@ const CreatePatientForm = () => {
                     onChange={handleChange}
                     required={isRequired}
                     type="date"
-                    value={formData.lastAppointment}
+                    value={data.lastAppointment}
                 />
             </div>
 
@@ -103,7 +67,7 @@ const CreatePatientForm = () => {
                     placeholder="Enter phone number"
                     required={isRequired}
                     type="tel"
-                    value={formData.phone}
+                    value={data.phone}
                 />
                 {/* whats the best practice for format info? */}
                 {/* <p className="absolute right-0 bottom-[-50%] text-xs">Format: 123-456-7890</p> */}
@@ -118,7 +82,7 @@ const CreatePatientForm = () => {
                     onChange={handleChange}
                     required={isRequired}
                     type="email"
-                    value={formData.email}
+                    value={data.email}
                 />
             </div>
 
@@ -139,8 +103,7 @@ const CreatePatientForm = () => {
                 </button>
             </div>
       </form>
-    //   </div>
     )
 }
 
-export default CreatePatientForm
+export default PatientForm

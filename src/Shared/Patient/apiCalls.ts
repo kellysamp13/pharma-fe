@@ -6,7 +6,7 @@ export const getPatientFetcher = (url: string) => fetch(url).then((res) => res.j
 
 export const updatePatientFetcher = (url: string, formData: any) => fetch(url,
     {
-        method: 'POST',
+        method: 'PUT',
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData)
     }

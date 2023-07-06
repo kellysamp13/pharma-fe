@@ -1,10 +1,12 @@
-import useSwr from 'swr'
 import { Prescription } from '../types'
 import { Link } from 'react-router-dom'
+import { useQuery } from '@tanstack/react-query'
 
 const PharmacistMain = () => {
-    const fetcher = (url: string) => fetch(url).then((res) => res.json())
-    const { data, error, isLoading } = useSwr('http://localhost:4000/prescriptions', fetcher)
+    const { data, isLoading } = useQuery({
+        queryKey: ['prescriptions'],
+        queryFn: () => fetch('http://localhost:4000/prescriptions').then((res) => res.json())
+    })
 
     if (isLoading || !data) {
         return <div>Loading...</div>

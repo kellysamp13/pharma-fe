@@ -1,8 +1,8 @@
 import PatientForm from "./Forms/PatientForm"
 import { useState } from 'react'
 import {Patient} from '../types'
-import useSwr from 'swr'
-import {Navigate} from 'react-router-dom'
+import { Navigate } from 'react-router-dom'
+import { useMutation } from '@tanstack/react-query'
 
 const CreatePatient = () => {
     const [formData, setFormData] = useState<Patient>({
@@ -13,15 +13,28 @@ const CreatePatient = () => {
         phone: '',
         prescriptions: [],
     })
-    const createPatientFetcher = (url: string) => fetch(url,
-        {
-            method: 'POST',
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(formData)
-        }).then(res => res.json())
+    const [userId, setUserId] = useState<string>('')
 
-    const [shouldPost, setShouldPost] = useState<boolean>(false)
-    const { data, error } = useSwr(shouldPost ? 'http://localhost:4000/patients' : null, createPatientFetcher)
+    const mutation = useMutation({
+        mutationFn: () => {
+            return fetch('http://localhost:4000/patients',
+                {
+                    method: 'POST',
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(formData)
+                }).then(res => {
+                    const result = res.json()
+                    return result
+                })
+        },
+        onSuccess: (data) => {
+            setUserId(data.id)
+        }
+    })
+
+    if (userId) {
+        return <Navigate to={`/patients/${userId}`}/>
+    }
 
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -32,12 +45,12 @@ const CreatePatient = () => {
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        setShouldPost(true)
+        mutation.mutate()
     }
 
-    if (data?.id) {
-        return <Navigate to={`/patients/${data.id}`}/>
-    }
+    // if (data?.id) {
+    //     return <Navigate to={`/patients/${data.id}`}/>
+    // }
 
     return (
         <div className="w-[80%] m-auto bg-white rounded my-10">

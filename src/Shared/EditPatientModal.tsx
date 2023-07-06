@@ -2,11 +2,10 @@ import { Patient } from '../types';
 import PatientForm from '../DoctorMain/Forms/PatientForm';
 import { updatePatientFetcher } from './Patient/apiCalls'
 import { useState } from 'react'
-import useSwr from 'swr'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useParams } from 'react-router-dom'
 
-const EditPatientModal = () => {
-    const [shouldPost, setShouldPost] = useState<boolean>(false)
+const EditPatientModal = ({ setShowModal }: { setShowModal: (arg: boolean) => void }) => {
     const [formData, setFormData] = useState<Patient>({
         email: '',
         firstName: '',
@@ -16,8 +15,25 @@ const EditPatientModal = () => {
         prescriptions: [],
     })
     const params = useParams()
+    const queryClient = useQueryClient()
 
-    const { data, isValidating } = useSwr(shouldPost ? [`http://localhost:4000/patients/${params.id}`, formData] : null, ([url, formData]) => updatePatientFetcher(url, formData))
+    const mutation = useMutation({
+        mutationFn: () => {
+            return fetch(`http://localhost:4000/patients/${params.id}`,
+                {
+                    method: 'PUT',
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(formData)
+                }
+            ).then(res => res.json())
+        },
+        onSuccess: (data) => {
+            setShowModal(false)
+            // refresh patient data - what is updater?
+            queryClient.setQueryData(['patient'], data)
+            console.log(data)
+        }
+    })
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({...formData, [e.target.name]: e.target.value})
@@ -25,7 +41,7 @@ const EditPatientModal = () => {
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        setShouldPost(true)
+        mutation.mutate()
     }
 
     return (

@@ -1,15 +1,14 @@
 import AddPrescriptionForm from '../../DoctorMain/Forms/AddPrescriptionForm'
 import { Prescription, PrescriptionStatus } from '../../types'
-import useSwr from 'swr'
 import { useState } from 'react'
 import { useParams } from 'react-router-dom'
+import { useMutation } from '@tanstack/react-query'
 
 interface Props {
     patientData: any
 }
 
 const PrescriptionSection = ({ patientData }: Props) => {
-    const [shouldPost, setShouldPost] = useState<boolean>(false)
     const params = useParams()
 
     const [prescriptions, setPrescriptions] = useState<Prescription>({
@@ -20,18 +19,25 @@ const PrescriptionSection = ({ patientData }: Props) => {
         id: '',
     })
 
-    const fetcher = (url: string, prescriptions: Prescription) => fetch(url,
-        {
-            method: 'POST',
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ prescriptions })
-        }).then(res => res.json())
-
-    // const { data, error } = useSwr(shouldPost ? `http://localhost:4000/prescriptions` : null, fetcher)
+    const mutation = useMutation({
+        mutationFn: () => {
+            return fetch('http://localhost:4000/prescriptions',
+                {
+                    method: 'POST',
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ prescriptions })
+                }).then(res => res.json())
+        },
+        onSuccess: (data) => {
+            // now I have this data - I need to have it on the user though
+            // so maybe this returns a user
+            console.log(data)
+        }
+    })
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        setShouldPost(true)
+        mutation.mutate()
     }
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         // don't trim until we post it
@@ -40,8 +46,6 @@ const PrescriptionSection = ({ patientData }: Props) => {
     }
 
     const disableSubmit = !prescriptions.name
-
-    const { data, isValidating } = useSwr(shouldPost ? [`http://localhost:4000/prescriptions`, prescriptions] : null, ([url, prescriptions]) => fetcher(url, prescriptions))
 
     return (
         <>

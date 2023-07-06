@@ -1,29 +1,38 @@
 import { Navigate, useParams } from 'react-router-dom'
-import useSwr from 'swr'
 import { useState } from 'react'
-import { getPatientFetcher } from './apiCalls'
 import PrescriptionSection from './PrescriptionSection'
-import EditPatientModal from '../EditPatientModal';
+import EditPatientModal from '../EditPatientModal'
+import { useQuery } from '@tanstack/react-query'
 
 const PatientView = () => {
     const params = useParams()
-    const { data: patientData, error, isLoading } = useSwr(`http://localhost:4000/patients/${params.id}`, getPatientFetcher)
+
+    const { data, isLoading, isFetching } = useQuery({
+        queryKey: ['patient'],
+        queryFn: () => {
+            return fetch(`http://localhost:4000/patients/${params.id}`).then((res) => res.json()).then(json => {
+                const expiredScripts = json.prescriptions.filter((script: any) => !Number(script.refills))
+                const activeScripts = json.prescriptions.filter((script: any) => Number(script.refills))
+                return {...json, expiredScripts, activeScripts}
+            })
+        }
+    })
 
     const [showModal, setShowModal] = useState<boolean>(false)
 
-    if (isLoading || !patientData) {
-        // the submitting behavior is really weird
+    if (isLoading || !data) {
+        // the submitting behavior is really weird - it doesn't have id for a min so redirects to /
         return <div>Loading...</div>
     }
 
-    // if (!patientData?.id) {
-    //     return <Navigate to='/'/>
-    // }
+    if (!data?.id && !isLoading && !isFetching) {
+        return <Navigate to='/'/>
+    }
 
     return (
         <div className="py-10 px-20 bg-white w-[90%] mx-auto p-6 rounded my-10">
 
-            {showModal && <EditPatientModal />}
+            {showModal && <EditPatientModal setShowModal={setShowModal} />}
 
             <div className="flex">
                 <h3 className="font-bold text-lg my-4 mr-10">
@@ -38,21 +47,21 @@ const PatientView = () => {
 
                 <div>
                     <div className="my-2">
-                        <strong>Name: </strong>{patientData.firstName} {patientData.lastName}
+                        <strong>Name: </strong>{data.firstName} {data.lastName}
                     </div>
                     <div className="my-2">
-                        <strong>Email: </strong>{patientData.email}
+                        <strong>Email: </strong>{data.email}
                     </div>
                     <div className="my-2">
-                        <strong>Phone number: </strong>{patientData.phone}
+                        <strong>Phone number: </strong>{data.phone}
                     </div>
                     <div className="my-2">
-                        <strong>Last appointment: </strong> {patientData.lastAppointment}
+                        <strong>Last appointment: </strong> {data.lastAppointment}
                     </div>
                 </div>
             </div>
 
-            <PrescriptionSection patientData={patientData} />
+            <PrescriptionSection patientData={data} />
         </div>
 
     )

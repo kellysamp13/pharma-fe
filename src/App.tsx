@@ -7,18 +7,24 @@ import {Link} from 'react-router-dom'
 import PharmacistMain from './PharmacistMain';
 import { useState } from 'react'
 import PrescriptionView from './PharmacistMain/PrescriptionView';
+import {
+  QueryClient,
+  QueryClientProvider,
+} from '@tanstack/react-query'
 
 // As a provider, I should be able to
 // * see all prescriptions
 // * edit prescription filled state
 // * see my other patients?
 
+const queryClient = new QueryClient()
+
 function App() {
   const [viewType, setViewType] = useState<string>(sessionStorage.getItem('viewType') || 'provider')
   const isProviderView = viewType === 'provider'
 
   return (
-    <div>
+    <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <div className="flex justify-between bg-white px-10 py-3">
           {isProviderView && <Link className='px-4 py-1 font-bold rounded text-white bg-teal-600' to='/addpatient'>Add a new patient</Link>}
@@ -40,7 +46,7 @@ function App() {
           <Route path='/prescriptions/:id' element={<PrescriptionView />}/>
         </Routes>
       </BrowserRouter>
-    </div>
+    </QueryClientProvider>
   );
 }
 

@@ -1,35 +1,13 @@
-import { useParams } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { PrescriptionStatus } from '../types'
 import { useEffect, useState } from 'react'
-import {
-    useQuery,
-    useMutation,
-  } from '@tanstack/react-query'
+import { useGetPrescription, useMutatePrescription } from './apiCalls'
 
 const PrescriptionView = () => {
-    const params = useParams()
-
-    const { isLoading, error, data, isFetching } = useQuery({
-        queryKey: ['prescription'],
-        queryFn: () => fetch(`http://localhost:4000/prescriptions/${params.id}`).then((res) => res.json())
-      })
     const [status, setStatus] = useState<PrescriptionStatus | null>(null)
 
-    const mutation = useMutation({
-        mutationFn: (status) => {
-            return fetch(`http://localhost:4000/prescriptions/${params.id}`, {
-                method: 'PUT',
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ status }),
-            }).then(res => {
-                const result = res.json()
-                return result
-            })
-        },
-        onSuccess: (data) => {
-            setStatus(data[0].status)
-        }
-      })
+    const { data } = useGetPrescription()
+    const mutation = useMutatePrescription(setStatus)
 
     const handleChange = (e: any) => {
         mutation.mutate(e.target.value)
@@ -60,6 +38,7 @@ const PrescriptionView = () => {
                         <option>{PrescriptionStatus.FILLED}</option>
                     </select>
                 </div>
+                <div>Patient: <Link to={`/patients/${data?.userId}`}>{data?.patient?.firstName} {data?.patient?.lastName}</Link></div>
             </form>
         </div>
     )

@@ -13,6 +13,7 @@ export interface Prescription {
     status: PrescriptionStatus
     userId: string
     id: string
+    patient?: Patient
 }
 
 // is this an interface or type?

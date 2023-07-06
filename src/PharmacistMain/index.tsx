@@ -1,16 +1,13 @@
 import { Prescription } from '../types'
 import { Link } from 'react-router-dom'
-import { useQuery } from '@tanstack/react-query'
+import { useGetPrescriptions } from './apiCalls'
 
 const PharmacistMain = () => {
-    const { data, isLoading } = useQuery({
-        queryKey: ['prescriptions'],
-        queryFn: () => fetch('http://localhost:4000/prescriptions').then((res) => res.json())
-    })
+    const { data, isLoading } = useGetPrescriptions()
 
-    if (isLoading || !data) {
-        return <div>Loading...</div>
-    }
+    // if (isLoading || !data) {
+    //     return <div>Loading...</div>
+    // }
 
     return (
         <div>

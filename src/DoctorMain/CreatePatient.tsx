@@ -2,7 +2,7 @@ import PatientForm from "./Forms/PatientForm"
 import { useState } from 'react'
 import {Patient} from '../types'
 import { Navigate } from 'react-router-dom'
-import { useMutation } from '@tanstack/react-query'
+import { useCreatePatient } from "../Shared/Patient/apiCalls"
 
 const CreatePatient = () => {
     const [formData, setFormData] = useState<Patient>({
@@ -15,22 +15,7 @@ const CreatePatient = () => {
     })
     const [userId, setUserId] = useState<string>('')
 
-    const mutation = useMutation({
-        mutationFn: () => {
-            return fetch('http://localhost:4000/patients',
-                {
-                    method: 'POST',
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(formData)
-                }).then(res => {
-                    const result = res.json()
-                    return result
-                })
-        },
-        onSuccess: (data) => {
-            setUserId(data.id)
-        }
-    })
+    const mutation = useCreatePatient(setUserId)
 
     if (userId) {
         return <Navigate to={`/patients/${userId}`}/>

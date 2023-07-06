@@ -2,7 +2,7 @@ import AddPrescriptionForm from '../../DoctorMain/Forms/AddPrescriptionForm'
 import { Prescription, PrescriptionStatus } from '../../types'
 import { useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { useMutation } from '@tanstack/react-query'
+import { useCreatePrescription } from './apiCalls'
 
 interface Props {
     patientData: any
@@ -19,25 +19,11 @@ const PrescriptionSection = ({ patientData }: Props) => {
         id: '',
     })
 
-    const mutation = useMutation({
-        mutationFn: () => {
-            return fetch('http://localhost:4000/prescriptions',
-                {
-                    method: 'POST',
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ prescriptions })
-                }).then(res => res.json())
-        },
-        onSuccess: (data) => {
-            // now I have this data - I need to have it on the user though
-            // so maybe this returns a user
-            console.log(data)
-        }
-    })
+    const mutation: any = useCreatePrescription()
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        mutation.mutate()
+        mutation.mutate(prescriptions)
     }
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         // don't trim until we post it
@@ -51,7 +37,7 @@ const PrescriptionSection = ({ patientData }: Props) => {
         <>
             <h3 className="font-bold text-lg my-4">Active Prescriptions</h3>
             <ul>
-                {patientData.activeScripts?.length ? patientData.activeScripts.map((script: Prescription) => {
+                {patientData?.activeScripts?.length ? patientData?.activeScripts.map((script: Prescription) => {
                     return (
                         <li className="flex justify-between">
                             <div>{script.name}</div>
@@ -66,7 +52,7 @@ const PrescriptionSection = ({ patientData }: Props) => {
 
             <h3 className="font-bold text-lg my-4">Expired Prescriptions</h3>
             <ul>
-                {patientData.expiredScripts?.length ? patientData.expiredScripts?.map((script: Prescription) => {
+                {patientData?.expiredScripts?.length ? patientData?.expiredScripts?.map((script: Prescription) => {
                     return (
                         <li className="flex justify-between">
                             <div>{script.name}</div>

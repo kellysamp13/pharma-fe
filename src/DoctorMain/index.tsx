@@ -1,14 +1,9 @@
 import{ Link }from 'react-router-dom'
 import { Patient } from '../types'
-import { useQuery } from '@tanstack/react-query'
+import { useGetPatients } from './apiCalls'
 
 const DoctorMain = () => {
-    const { data, isLoading } = useQuery({
-        queryKey: ['patients'],
-        queryFn: () => {
-            return fetch('http://localhost:4000/patients').then((res) => res.json())
-        }
-    })
+    const { data, isLoading } = useGetPatients()
 
     if (isLoading || !data) {
         return <div>Loading...</div>

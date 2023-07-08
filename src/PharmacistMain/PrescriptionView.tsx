@@ -46,15 +46,13 @@ const PrescriptionView = () => {
                 </div>
                 <div>Refills: {data?.refills}</div>
             </form>
-            <div>
-                Patient:&nbsp;
-                <Link
-                    className="text-teal-600 font-bold"
-                    to={`/patients/${data?.userId}`}
-                >
-                    {data?.patient?.firstName} {data?.patient?.lastName}
-                </Link>
-            </div>
+
+            <Link
+                className="text-teal-600 font-bold"
+                to={`/patients/${data?.userId}`}
+            >
+                View Patient Info
+            </Link>
         </div>
     )
 }

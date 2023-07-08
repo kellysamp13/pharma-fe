@@ -25,7 +25,7 @@ const EditPatientModal = ({ setShowModal }: { setShowModal: (arg: boolean) => vo
     }
 
     return (
-        <div className="absolute z-10 bg-white rounded h-[70%] w-[70%] top-2 border-2 border-teal-600">
+        <div className="absolute z-10 bg-white rounded md:h-[70%] w-[70%] top-2 border-2 border-teal-600">
             <button onClick={() => setShowModal(false)} className="absolute right-4 top-2 font-bold">X</button>
             <PatientForm
                 data={formData}

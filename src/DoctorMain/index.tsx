@@ -61,9 +61,9 @@ const DoctorMain = () => {
                 isGoForwardDisabled={!offset}
             />
 
-            <div className="grid grid-cols-3 my-4 px-2 font-bold">
+            <div className="grid grid-cols-3 my-4 px-2 font-bold break-all">
                 <p>Patient name</p>
-                <p>Prescriptions</p>
+                <p className="">Prescriptions</p>
                 <p>Last appointment</p>
             </div>
 

@@ -14,7 +14,7 @@ const AddPrescriptionForm = ({ handleChange, handleSubmit, data }: Props) => {
 
     return (
         <form className="" onSubmit={(e) => handleSubmit(e)}>
-            <div className="flex justify-between">
+            <div className="flex justify-between flex-col md:flex-row">
                 {isProviderView ? <div className="mb-4">
                     <label className="mr-3" htmlFor="name">Prescription Name</label>
                     <input
@@ -68,7 +68,7 @@ const AddPrescriptionForm = ({ handleChange, handleSubmit, data }: Props) => {
                     className={`px-4 py-1 font-bold rounded text-white ${disableSubmit ? 'bg-slate-300' : 'bg-teal-600'}`}
                     type="submit"
                 >
-                    Update
+                    Add Prescription
                 </button>
             </div>
 

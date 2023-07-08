@@ -31,7 +31,7 @@ const PrescriptionSection = ({ patientData }: Props) => {
         setPrescriptions({...prescriptions, [e.target.name]: e.target.value.trim()})
     }
 
-    const disableSubmit = !prescriptions.name
+    const [expandedAdd, setExpandedAdd] = useState(false)
 
     return (
         <>
@@ -39,7 +39,7 @@ const PrescriptionSection = ({ patientData }: Props) => {
             <ul>
                 {patientData?.activeScripts?.length ? patientData?.activeScripts.map((script: Prescription) => {
                     return (
-                        <li className="grid grid-cols-4 mb-2">
+                        <li key={script.id} className="grid grid-cols-4 mb-2">
                             <div>{script.name}</div>
                             <div>{script.status}</div>
                             <div>Refills: {script.refills}</div>
@@ -54,7 +54,7 @@ const PrescriptionSection = ({ patientData }: Props) => {
             <ul>
                 {patientData?.expiredScripts?.length ? patientData?.expiredScripts?.map((script: Prescription) => {
                     return (
-                        <li className="grid grid-cols-4 mb-2">
+                        <li key={script.id} className="grid grid-cols-4 mb-2">
                             <div>{script.name}</div>
                             <div>{script.status}</div>
                             <div>Refills: {script.refills}</div>
@@ -67,12 +67,21 @@ const PrescriptionSection = ({ patientData }: Props) => {
 
             {/* show this section with a button */}
             {isProviderView ? <>
-                <h3 className="font-bold text-lg my-4">Add New Prescription</h3>
-                <AddPrescriptionForm
+                <h3 className="font-bold text-lg my-4">
+                    Add New Prescription
+                    <button
+                        className='px-4 text-sm py-1 font-bold rounded text-white bg-teal-600 ml-3'
+                        onClick={() => setExpandedAdd(!expandedAdd)}
+                    >
+                        {expandedAdd ? '-' : '+'}
+                    </button>
+                </h3>
+
+                {expandedAdd ? <AddPrescriptionForm
                     handleChange={handleChange}
                     handleSubmit={handleSubmit}
                     data={prescriptions}
-                />
+                /> : null}
             </> : null}
         </>
     )

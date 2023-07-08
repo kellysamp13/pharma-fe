@@ -12,11 +12,6 @@ import {
   QueryClientProvider,
 } from '@tanstack/react-query'
 
-// As a provider, I should be able to
-// * see all prescriptions
-// * edit prescription filled state
-// * see my other patients?
-
 const queryClient = new QueryClient()
 
 function App() {
@@ -26,22 +21,24 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <div className="flex bg-teal-600 px-16 py-3 border-b border-b-white">
-          <Link
-            className='px-4 py-1 font-bold rounded text-white'
-            to='/'>
-              View all {isProviderView ? 'patients' : 'prescriptions'}
-          </Link>
-          {isProviderView && <Link className='px-4 py-1 font-bold rounded text-white' to='/addpatient'>Add a new patient</Link>}
-          <button
-            onClick={() => {
-              const newView = isProviderView ? 'pharmacist' : 'provider'
-              sessionStorage.setItem('viewType', newView)
-              setViewType(newView)
-            }}
-            className='px-4 py-1 font-bold rounded text-white'>
-              Change to {isProviderView ? 'pharmacist' : 'provider'} view
-            </button>
+        <div className="flex bg-teal-600 py-3 border-b border-b-white">
+          <div className="w-[90%] m-auto ">
+            <Link
+              className='px-4 py-1 font-bold rounded text-white'
+              to='/'>
+                View all {isProviderView ? 'patients' : 'prescriptions'}
+            </Link>
+            {isProviderView && <Link className='px-4 py-1 font-bold rounded text-white' to='/addpatient'>Add a new patient</Link>}
+            <button
+              onClick={() => {
+                const newView = isProviderView ? 'pharmacist' : 'provider'
+                sessionStorage.setItem('viewType', newView)
+                setViewType(newView)
+              }}
+              className='px-4 py-1 font-bold rounded text-white'>
+                Change to {isProviderView ? 'pharmacist' : 'provider'} view
+              </button>
+            </div>
         </div>
         <Routes>
           <Route path='/' element={isProviderView ? <DoctorMain/> : <PharmacistMain />}/>

@@ -18,11 +18,15 @@ const PatientView = () => {
     useEffect(() => {
         fetch(`http://localhost:4000/patients/${params.id}`).then((res) => res.json()).then(json => {
                 const expiredScripts = json.prescriptions.filter((script: any) => !Number(script.refills))
+                console.log('ex', json.prescriptions)
                 const activeScripts = json.prescriptions.filter((script: any) => Number(script.refills))
-                const newData = {...json, expiredScripts, activeScripts}
+                const newData = {...json, expiredScripts: expiredScripts, activeScripts: activeScripts}
                 return setData(newData)
             })
     }, [])
+
+    console.log(data)
+
 
 
     // if (isLoading || !data) {
@@ -35,7 +39,7 @@ const PatientView = () => {
     // }
 
     return (
-        <div className="py-10 px-20 bg-white w-[90%] mx-auto p-6 rounded my-10">
+        <div className="md:py-10 md:px-20 bg-white w-[90%] mx-auto p-6 rounded my-10">
 
             {showModal && <EditPatientModal setShowModal={setShowModal} />}
 
@@ -44,7 +48,7 @@ const PatientView = () => {
                     Patient Info
                     <button
                         onClick={() => setShowModal(true)}
-                        className='ml-3 px-4 text-sm py-1 font-bold rounded text-white bg-teal-600'
+                        className='md:ml-3 px-4 text-sm py-1 font-bold rounded text-white bg-teal-600'
                     >
                         Edit
                     </button>

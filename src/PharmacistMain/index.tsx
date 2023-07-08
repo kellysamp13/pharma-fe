@@ -5,11 +5,13 @@ import { useState, useEffect } from 'react'
 import ListViewControls from '../components/ListViewControls'
 
 const PharmacistMain = () => {
-    // const { data, isLoading } = useGetPrescriptions()
+    const { data: otherData, isLoading } = useGetPrescriptions()
 
     // if (isLoading || !data) {
     //     return <div>Loading...</div>
     // }
+
+    console.log('other', otherData)
 
     const [data, setData] = useState([])
     const [searchTerm, setSearchTerm] = useState('')
@@ -29,23 +31,72 @@ const PharmacistMain = () => {
         })
     }
 
+    const handleSubmit = (e: any) => {
+        e.preventDefault()
+        const filterString = filters.join(',')
+        fetch(`http://localhost:4000/prescriptions?filters=${filterString}`).then((res) =>  res.json()).then(json => {
+            setData(json.prescriptions)
+            setOffset(json.nextOffset)
+        })
+    }
+
+    const [filters, setFilters] = useState<string[]>([])
+
     return (
         <div className="w-[90%] m-auto px-4 pb-10">
-            <div className="flex flex-col">
-                Filter by status
-                <div>
-                    <input type="checkbox"></input>
-                    <label>In progress</label>
+            <form className="flex" onSubmit={handleSubmit}>
+                <div className="mr-3 flex flex-col justify-center">
+                    <p>Filter by status</p>
+
+                    <button className="mt-2  ml-2 text-white border border-white rounded px-2" type='submit'>Submit</button>
                 </div>
-                <div>
-                    <input type="checkbox"></input>
-                    <label>Pending</label>
+
+                <div className="">
+                    <div>
+                        {/* ITERATE THESE?
+                        MAKE THEM AN ENUM */}
+                        <input
+                            checked={filters.includes('in progress')}
+                            className="mr-2"
+                            type="checkbox"
+                            onChange={() => {
+                                const newFilters = filters.includes('in progress') ?
+                                    filters.filter(filter => filter !== 'in progress') : [...filters, 'in progress']
+                                setFilters(newFilters)
+                            }}
+                        />
+                        <label>In progress</label>
+                    </div>
+                    <div>
+                        <input
+                            checked={filters.includes('pending')}
+                            className="mr-2"
+                            onChange={() => {
+                                const newFilters = filters.includes('pending') ?
+                                    filters.filter(filter => filter !== 'pending') : [...filters, 'pending']
+                                setFilters(newFilters)
+                            }}
+                            type="checkbox"
+                        />
+                        <label>Pending</label>
+                    </div>
+                    <div>
+                        <input
+                            checked={filters.includes('filled')}
+                            className="mr-2"
+                            type="checkbox"
+                            onChange={() => {
+                                const newFilters = filters.includes('filled') ?
+                                    filters.filter(filter => filter !== 'filled') : [...filters, 'filled']
+                                setFilters(newFilters)
+                            }}
+                        />
+                        <label>Filled</label>
+                    </div>
                 </div>
-                <div>
-                    <input type="checkbox"></input>
-                    <label>Filled</label>
-                </div>
-            </div>
+
+
+            </form>
 
             <div className="mt-4">
                 <form onSubmit={(e) => handleSearch(e)}>

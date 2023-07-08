@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { PrescriptionStatus } from '../types'
 import { useEffect, useState } from 'react'
 import { useGetPrescription, useMutatePrescription } from './apiCalls'
@@ -6,12 +6,19 @@ import { useGetPrescription, useMutatePrescription } from './apiCalls'
 const PrescriptionView = () => {
     const [status, setStatus] = useState<PrescriptionStatus | null>(null)
 
-    const { data } = useGetPrescription()
+    // const { data } = useGetPrescription()
+    const [data, setData] = useState<any>([])
     const mutation = useMutatePrescription(setStatus)
 
     const handleChange = (e: any) => {
         mutation.mutate(e.target.value)
     }
+
+    const params = useParams()
+
+    useEffect(() => {
+        fetch(`http://localhost:4000/prescriptions/${params.id}`).then((res) =>  res.json()).then(json => setData(json))
+    }, [])
 
     useEffect(() => {
         if (data?.status) {
@@ -21,13 +28,12 @@ const PrescriptionView = () => {
 
     return (
         <div className="py-10 px-20 bg-white w-[90%] mx-auto p-6 rounded my-10">
-            <form>
+            <form className="flex justify-between mb-4">
                 <div>Prescription: {data?.name}</div>
-                <div>Refills: {data?.refills}</div>
-                <div className="mb-4 flex justify-between">
+                <div className="">
                     <label className="mr-3" htmlFor="status">Fulfillment Status</label>
                     <select
-                        className="w-[50%]"
+                        className=""
                         id="status"
                         name="status"
                         onChange={handleChange}
@@ -38,8 +44,17 @@ const PrescriptionView = () => {
                         <option>{PrescriptionStatus.FILLED}</option>
                     </select>
                 </div>
-                <div>Patient: <Link to={`/patients/${data?.userId}`}>{data?.patient?.firstName} {data?.patient?.lastName}</Link></div>
+                <div>Refills: {data?.refills}</div>
             </form>
+            <div>
+                Patient:&nbsp;
+                <Link
+                    className="text-teal-600 font-bold"
+                    to={`/patients/${data?.userId}`}
+                >
+                    {data?.patient?.firstName} {data?.patient?.lastName}
+                </Link>
+            </div>
         </div>
     )
 }

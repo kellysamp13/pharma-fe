@@ -1,6 +1,6 @@
 import { Patient } from '../types';
-import PatientForm from '../DoctorMain/Forms/PatientForm';
-import { useUpdatePatient } from './Patient/apiCalls'
+import PatientForm from '../components/PatientForm';
+import { useUpdatePatient } from './apiCalls'
 import { useState } from 'react'
 
 const EditPatientModal = ({ setShowModal }: { setShowModal: (arg: boolean) => void }) => {
@@ -25,8 +25,14 @@ const EditPatientModal = ({ setShowModal }: { setShowModal: (arg: boolean) => vo
     }
 
     return (
-        <div className="absolute z-10 bg-slate-100 h-[60%] w-[50%] top-0 border border-black">
-            <PatientForm data={formData} handleChange={handleChange} handleSubmit={handleSubmit} />
+        <div className="absolute z-10 bg-white rounded h-[70%] w-[70%] top-2 border-2 border-teal-600">
+            <button onClick={() => setShowModal(false)} className="absolute right-4 top-2 font-bold">X</button>
+            <PatientForm
+                data={formData}
+                handleCancel={() => setShowModal(false)}
+                handleChange={handleChange}
+                handleSubmit={handleSubmit}
+            />
         </div>
     )
 }

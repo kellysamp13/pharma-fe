@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.css'
 import CreatePatient from "./DoctorMain/CreatePatient"
 import DoctorMain from './DoctorMain';
-import PatientView from './Shared/Patient'
+import PatientView from './Patient'
 import {Link} from 'react-router-dom'
 import PharmacistMain from './PharmacistMain';
 import { useState } from 'react'
@@ -26,16 +26,20 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <div className="flex justify-between bg-white px-10 py-3">
-          {isProviderView && <Link className='px-4 py-1 font-bold rounded text-white bg-teal-600' to='/addpatient'>Add a new patient</Link>}
-          <Link className='px-4 py-1 font-bold rounded text-white bg-teal-600' to='/'>View all {isProviderView ? 'patients' : 'prescriptions'}</Link>
+        <div className="flex bg-teal-600 px-16 py-3 border-b border-b-white">
+          <Link
+            className='px-4 py-1 font-bold rounded text-white'
+            to='/'>
+              View all {isProviderView ? 'patients' : 'prescriptions'}
+          </Link>
+          {isProviderView && <Link className='px-4 py-1 font-bold rounded text-white' to='/addpatient'>Add a new patient</Link>}
           <button
             onClick={() => {
               const newView = isProviderView ? 'pharmacist' : 'provider'
               sessionStorage.setItem('viewType', newView)
               setViewType(newView)
             }}
-            className='px-4 py-1 font-bold rounded text-white bg-teal-600'>
+            className='px-4 py-1 font-bold rounded text-white'>
               Change to {isProviderView ? 'pharmacist' : 'provider'} view
             </button>
         </div>

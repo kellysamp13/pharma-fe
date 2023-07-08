@@ -1,13 +1,29 @@
-import { Navigate } from 'react-router-dom'
-import { useState } from 'react'
+import { Navigate, useParams } from 'react-router-dom'
+import { useState, useEffect } from 'react'
 import PrescriptionSection from './PrescriptionSection'
-import EditPatientModal from '../EditPatientModal'
+import EditPatientModal from './EditPatientModal'
 import { useGetPatient } from './apiCalls'
+import { Patient } from '../types'
 
 const PatientView = () => {
-    const { data, isLoading, isFetching } = useGetPatient()
+    // const { data, isLoading, isFetching } = useGetPatient()
 
     const [showModal, setShowModal] = useState<boolean>(false)
+
+    const [data, setData] = useState<Patient | null>(null)
+    // const [searchTerm, setSearchTerm] = useState('')
+
+    const params = useParams()
+
+    useEffect(() => {
+        fetch(`http://localhost:4000/patients/${params.id}`).then((res) => res.json()).then(json => {
+                const expiredScripts = json.prescriptions.filter((script: any) => !Number(script.refills))
+                const activeScripts = json.prescriptions.filter((script: any) => Number(script.refills))
+                const newData = {...json, expiredScripts, activeScripts}
+                return setData(newData)
+            })
+    }, [])
+
 
     // if (isLoading || !data) {
     //     // the submitting behavior is really weird - it doesn't have id for a min so redirects to /

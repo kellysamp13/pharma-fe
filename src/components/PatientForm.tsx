@@ -2,14 +2,15 @@ interface Props {
     handleChange: (arg: any) => void
     handleSubmit: (arg: any) => void
     data: any
-    isRequired?: boolean
+    isCreate?: boolean
+    handleCancel?: () => void
 }
 
-const PatientForm = ({ isRequired = false, data, handleChange, handleSubmit }: Props) => {
+const PatientForm = ({ isCreate = false, data, handleChange, handleSubmit, handleCancel }: Props) => {
     const disableSubmit = false
 
     return (
-        <form className="mx-auto p-6 rounded" onSubmit={(e) => handleSubmit(e)}>
+        <form className={`mx-auto ${isCreate ? 'w-[60%]' : 'w-[90%]'} py-10 rounded`} onSubmit={(e) => handleSubmit(e)}>
 
             <h3 className="font-bold text-lg mb-4">Patient Information</h3>
 
@@ -21,7 +22,7 @@ const PatientForm = ({ isRequired = false, data, handleChange, handleSubmit }: P
                     name="firstName"
                     onChange={handleChange}
                     placeholder="Enter First Name"
-                    required={isRequired}
+                    required={isCreate}
                     type="text"
                     value={data.firstName}
                 />
@@ -35,7 +36,7 @@ const PatientForm = ({ isRequired = false, data, handleChange, handleSubmit }: P
                     name="lastName"
                     onChange={handleChange}
                     placeholder="Enter Last Name"
-                    required={isRequired}
+                    required={isCreate}
                     type="text"
                     value={data.lastName}
                 />
@@ -49,7 +50,7 @@ const PatientForm = ({ isRequired = false, data, handleChange, handleSubmit }: P
                     name="lastAppointment"
                     // it looks like: 2023-06-13
                     onChange={handleChange}
-                    required={isRequired}
+                    required={isCreate}
                     type="date"
                     value={data.lastAppointment}
                 />
@@ -65,7 +66,7 @@ const PatientForm = ({ isRequired = false, data, handleChange, handleSubmit }: P
                     name="phone"
                     onChange={handleChange}
                     placeholder="Enter phone number"
-                    required={isRequired}
+                    required={isCreate}
                     type="tel"
                     value={data.phone}
                 />
@@ -80,27 +81,27 @@ const PatientForm = ({ isRequired = false, data, handleChange, handleSubmit }: P
                     id="email"
                     name="email"
                     onChange={handleChange}
-                    required={isRequired}
+                    required={isCreate}
                     type="email"
                     value={data.email}
                 />
             </div>
 
-            <div className="flex flex-col items-center mt-5">
+            <div className="flex flex-col items-center mt-10">
                 <button
-                    className={`px-4 py-1 w-[50%] font-bold rounded text-white ${disableSubmit ? 'bg-slate-300' : 'bg-teal-600'}`}
+                    className={`px-4 py-2 w-[40%] font-bold rounded text-white ${disableSubmit ? 'bg-slate-300' : 'bg-teal-600'}`}
                     disabled={disableSubmit}
                     type="submit"
                 >
-                    Create New Patient Account
+                    {isCreate ? 'Create Patient Account' : 'Update Patient Account'}
                 </button>
-                <button
+                {handleCancel ? <button
                     className={`px-4 py-1 w-[40%] mt-2 font-bold rounded text-white ${disableSubmit ? 'bg-slate-300' : 'bg-rose-600'}`}
-                    disabled={disableSubmit}
+                    onClick={() => handleCancel()}
                     type="button"
                 >
                     Cancel
-                </button>
+                </button> : null}
             </div>
       </form>
     )

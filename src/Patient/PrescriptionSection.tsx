@@ -1,5 +1,5 @@
-import AddPrescriptionForm from '../../DoctorMain/Forms/AddPrescriptionForm'
-import { Prescription, PrescriptionStatus } from '../../types'
+import AddPrescriptionForm from '../components/AddPrescriptionForm'
+import { Prescription, PrescriptionStatus } from '../types'
 import { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useCreatePrescription } from './apiCalls'
@@ -10,13 +10,14 @@ interface Props {
 
 const PrescriptionSection = ({ patientData }: Props) => {
     const params = useParams()
+    const isProviderView = sessionStorage.getItem('viewType') === 'provider'
 
     const [prescriptions, setPrescriptions] = useState<Prescription>({
-        status: PrescriptionStatus.IN_PROGRESS,
-        refills: 0,
-        name: '',
-        userId: String(params.id || ''),
         id: '',
+        name: '',
+        refills: 0,
+        status: PrescriptionStatus.IN_PROGRESS,
+        userId: String(params.id || ''),
     })
 
     const mutation: any = useCreatePrescription()
@@ -26,7 +27,6 @@ const PrescriptionSection = ({ patientData }: Props) => {
         mutation.mutate(prescriptions)
     }
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        // don't trim until we post it
         // update local state
         setPrescriptions({...prescriptions, [e.target.name]: e.target.value.trim()})
     }
@@ -39,7 +39,7 @@ const PrescriptionSection = ({ patientData }: Props) => {
             <ul>
                 {patientData?.activeScripts?.length ? patientData?.activeScripts.map((script: Prescription) => {
                     return (
-                        <li className="flex justify-between">
+                        <li className="grid grid-cols-4 mb-2">
                             <div>{script.name}</div>
                             <div>{script.status}</div>
                             <div>Refills: {script.refills}</div>
@@ -54,7 +54,7 @@ const PrescriptionSection = ({ patientData }: Props) => {
             <ul>
                 {patientData?.expiredScripts?.length ? patientData?.expiredScripts?.map((script: Prescription) => {
                     return (
-                        <li className="flex justify-between">
+                        <li className="grid grid-cols-4 mb-2">
                             <div>{script.name}</div>
                             <div>{script.status}</div>
                             <div>Refills: {script.refills}</div>
@@ -65,9 +65,15 @@ const PrescriptionSection = ({ patientData }: Props) => {
                 }): <div>No expired prescriptions.</div>}
             </ul>
 
-            <h3 className="font-bold text-lg my-4">Add New Prescription</h3>
             {/* show this section with a button */}
-            <AddPrescriptionForm handleChange={handleChange} handleSubmit={handleSubmit} data={prescriptions} />
+            {isProviderView ? <>
+                <h3 className="font-bold text-lg my-4">Add New Prescription</h3>
+                <AddPrescriptionForm
+                    handleChange={handleChange}
+                    handleSubmit={handleSubmit}
+                    data={prescriptions}
+                />
+            </> : null}
         </>
     )
 }

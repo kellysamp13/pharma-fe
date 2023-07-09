@@ -1,13 +1,25 @@
+import React from "react"
+import { Patient } from '../schemas/Patient'
+
 interface Props {
-    handleChange: (arg: any) => void
-    handleSubmit: (arg: any) => void
-    data: any
-    isCreate?: boolean
+    data: Patient
     handleCancel?: () => void
+    handleChange: (arg: React.ChangeEvent<HTMLInputElement>) => void
+    handleSubmit: (arg: React.FormEvent<HTMLFormElement>) => void
+    isCreate?: boolean
 }
 
-const PatientForm = ({ isCreate = false, data, handleChange, handleSubmit, handleCancel }: Props) => {
+const PatientForm = ({
+    data,
+    handleCancel,
+    handleChange,
+    handleSubmit,
+    isCreate = false,
+}: Props) => {
+    // needs to disable on submit
     const disableSubmit = false
+
+    const { firstName, lastName, lastAppointment, phone, email } = data
 
     return (
         <form className={`mx-auto ${isCreate ? 'w-[60%]' : 'w-[90%]'} py-10 rounded`} onSubmit={(e) => handleSubmit(e)}>
@@ -22,7 +34,7 @@ const PatientForm = ({ isCreate = false, data, handleChange, handleSubmit, handl
                     placeholder="Enter First Name"
                     required={isCreate}
                     type="text"
-                    value={data.firstName}
+                    value={firstName}
                 />
             </div>
 
@@ -36,7 +48,7 @@ const PatientForm = ({ isCreate = false, data, handleChange, handleSubmit, handl
                     placeholder="Enter Last Name"
                     required={isCreate}
                     type="text"
-                    value={data.lastName}
+                    value={lastName}
                 />
             </div>
 
@@ -50,7 +62,7 @@ const PatientForm = ({ isCreate = false, data, handleChange, handleSubmit, handl
                     onChange={handleChange}
                     required={isCreate}
                     type="date"
-                    value={data.lastAppointment}
+                    value={lastAppointment || ''}
                 />
             </div>
 
@@ -66,7 +78,7 @@ const PatientForm = ({ isCreate = false, data, handleChange, handleSubmit, handl
                     placeholder="Enter phone number"
                     required={isCreate}
                     type="tel"
-                    value={data.phone}
+                    value={phone}
                 />
                 {/* whats the best practice for format info? */}
                 {/* <p className="absolute right-0 bottom-[-50%] text-xs">Format: 123-456-7890</p> */}
@@ -81,7 +93,7 @@ const PatientForm = ({ isCreate = false, data, handleChange, handleSubmit, handl
                     onChange={handleChange}
                     required={isCreate}
                     type="email"
-                    value={data.email}
+                    value={email}
                 />
             </div>
 

@@ -1,6 +1,6 @@
 import { Link, useParams } from 'react-router-dom'
-import { PrescriptionStatus } from '../types'
-import { useEffect, useState } from 'react'
+import { PrescriptionStatus } from '../schemas/Prescription'
+import React, { useEffect, useState } from 'react'
 import { useGetPrescription, useMutatePrescription } from './apiCalls'
 
 const PrescriptionView = () => {
@@ -10,7 +10,8 @@ const PrescriptionView = () => {
     const [data, setData] = useState<any>([])
     const mutation = useMutatePrescription(setStatus)
 
-    const handleChange = (e: any) => {
+    // getting an error for mutate when removing any
+    const handleChange = (e: React.ChangeEvent<HTMLSelectElement> | any) => {
         mutation.mutate(e.target.value)
     }
 
@@ -30,10 +31,9 @@ const PrescriptionView = () => {
         <div className="py-10 px-20 bg-white w-[90%] mx-auto p-6 rounded my-10">
             <form className="flex justify-between mb-4">
                 <div>Prescription: {data?.name}</div>
-                <div className="">
+                <div>
                     <label className="mr-3" htmlFor="status">Fulfillment Status</label>
                     <select
-                        className=""
                         id="status"
                         name="status"
                         onChange={handleChange}

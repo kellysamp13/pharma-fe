@@ -1,9 +1,13 @@
-import { Patient } from '../types';
+import { Patient } from '../schemas/Patient';
 import PatientForm from '../components/PatientForm';
 import { useUpdatePatient } from './apiCalls'
 import { useState } from 'react'
 
-const EditPatientModal = ({ setShowModal }: { setShowModal: (arg: boolean) => void }) => {
+interface Props {
+    setShowModal: () => void
+}
+
+const EditPatientModal = ({ setShowModal }: Props) => {
     const [formData, setFormData] = useState<Patient>({
         email: '',
         firstName: '',
@@ -26,10 +30,15 @@ const EditPatientModal = ({ setShowModal }: { setShowModal: (arg: boolean) => vo
 
     return (
         <div className="absolute z-10 bg-white rounded md:h-[70%] w-[70%] top-2 border-2 border-teal-600">
-            <button onClick={() => setShowModal(false)} className="absolute right-4 top-2 font-bold">X</button>
+            <button
+                className="absolute right-4 top-2 font-bold"
+                onClick={setShowModal}
+            >
+                X
+            </button>
             <PatientForm
                 data={formData}
-                handleCancel={() => setShowModal(false)}
+                handleCancel={setShowModal}
                 handleChange={handleChange}
                 handleSubmit={handleSubmit}
             />

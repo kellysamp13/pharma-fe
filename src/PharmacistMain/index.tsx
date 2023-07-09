@@ -1,4 +1,4 @@
-import { Prescription } from '../types'
+import { Prescription } from '../schemas/Prescription'
 import { Link } from 'react-router-dom'
 import { useGetPrescriptions } from './apiCalls'
 import { useState, useEffect } from 'react'
@@ -10,8 +10,6 @@ const PharmacistMain = () => {
     // if (isLoading || !data) {
     //     return <div>Loading...</div>
     // }
-
-    console.log('other', otherData)
 
     const [data, setData] = useState([])
     const [searchTerm, setSearchTerm] = useState('')
@@ -51,10 +49,8 @@ const PharmacistMain = () => {
                     <button className="mt-2  ml-2 text-white border border-white rounded px-2" type='submit'>Submit</button>
                 </div>
 
-                <div className="">
+                <div>
                     <div>
-                        {/* ITERATE THESE?
-                        MAKE THEM AN ENUM */}
                         <input
                             checked={filters.includes('in progress')}
                             className="mr-2"
@@ -103,8 +99,8 @@ const PharmacistMain = () => {
                     <label className="mr-2">Search by drug name</label>
                     <input
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        value={searchTerm}
                         type="search"
+                        value={searchTerm}
                     />
                     <button className="ml-2 text-white border border-white rounded px-2" type='submit'>Submit</button>
                 </form>
@@ -143,7 +139,7 @@ const PharmacistMain = () => {
                                 className={`grid grid-cols-3 py-3 ${index !== data.length-1 ? 'border-b border-b-black' : ''}`}
                                 key={prescription.id}
                             >
-                                <div className="">{prescription.name}</div>
+                                <div>{prescription.name}</div>
                                 <div>{prescription.status}</div>
                                 <div>{prescription.refills}</div>
                             </li>

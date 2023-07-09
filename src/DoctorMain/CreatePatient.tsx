@@ -1,17 +1,16 @@
-import PatientForm from "../components/PatientForm"
 import { useState } from 'react'
-import {Patient} from '../types'
 import { Navigate } from 'react-router-dom'
+import { Patient } from '../schemas/Patient'
 import { useCreatePatient } from "../Patient/apiCalls"
+import PatientForm from "../components/PatientForm"
 
 const CreatePatient = () => {
     const [formData, setFormData] = useState<Patient>({
         email: '',
         firstName: '',
-        lastAppointment: '',
+        lastAppointment: null,
         lastName: '',
         phone: '',
-        prescriptions: [],
     })
     const [userId, setUserId] = useState<string>('')
 
@@ -20,7 +19,6 @@ const CreatePatient = () => {
     if (userId) {
         return <Navigate to={`/patients/${userId}`}/>
     }
-
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({...formData, [e.target.name]: e.target.value})
@@ -40,10 +38,10 @@ const CreatePatient = () => {
     return (
         <div className="w-[80%] m-auto bg-white rounded my-10">
             <PatientForm
-                isCreate={true}
                 data={formData}
                 handleChange={handleChange}
                 handleSubmit={handleSubmit}
+                isCreate={true}
             />
         </div>
     )

@@ -1,11 +1,12 @@
 import AddPrescriptionForm from '../components/AddPrescriptionForm'
-import { Prescription, PrescriptionStatus } from '../types'
+import { Prescription, PrescriptionStatus } from '../schemas/Prescription'
+import { Patient } from '../schemas/Patient'
 import { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useCreatePrescription } from './apiCalls'
 
 interface Props {
-    patientData: any
+    patientData: Patient | null
 }
 
 const PrescriptionSection = ({ patientData }: Props) => {
@@ -28,7 +29,7 @@ const PrescriptionSection = ({ patientData }: Props) => {
     }
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         // update local state
-        setPrescriptions({...prescriptions, [e.target.name]: e.target.value.trim()})
+        setPrescriptions({...prescriptions, [e.target.name]: e.target.value})
     }
 
     const [expandedAdd, setExpandedAdd] = useState(false)
@@ -37,7 +38,7 @@ const PrescriptionSection = ({ patientData }: Props) => {
         <>
             <h3 className="font-bold text-lg my-4">Active Prescriptions</h3>
             <ul>
-                {patientData?.activeScripts?.length ? patientData?.activeScripts.map((script: Prescription) => {
+                {patientData?.activeScripts?.length ? patientData?.activeScripts.map((script: any) => {
                     return (
                         <li key={script.id} className="grid grid-cols-4 mb-2">
                             <div>{script.name}</div>
@@ -52,7 +53,7 @@ const PrescriptionSection = ({ patientData }: Props) => {
 
             <h3 className="font-bold text-lg my-4">Expired Prescriptions</h3>
             <ul>
-                {patientData?.expiredScripts?.length ? patientData?.expiredScripts?.map((script: Prescription) => {
+                {patientData?.expiredScripts?.length ? patientData?.expiredScripts?.map((script: any) => {
                     return (
                         <li key={script.id} className="grid grid-cols-4 mb-2">
                             <div>{script.name}</div>
@@ -77,11 +78,13 @@ const PrescriptionSection = ({ patientData }: Props) => {
                     </button>
                 </h3>
 
-                {expandedAdd ? <AddPrescriptionForm
-                    handleChange={handleChange}
-                    handleSubmit={handleSubmit}
-                    data={prescriptions}
-                /> : null}
+                {expandedAdd ? (
+                    <AddPrescriptionForm
+                        data={prescriptions}
+                        handleChange={handleChange}
+                        handleSubmit={handleSubmit}
+                    />
+                ) : null}
             </> : null}
         </>
     )

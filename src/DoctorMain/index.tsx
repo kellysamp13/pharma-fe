@@ -1,11 +1,12 @@
-import{ Link }from 'react-router-dom'
-import { Patient } from '../types'
-import { useGetPatients } from './apiCalls'
 import { useEffect, useState } from 'react'
+import{ Link }from 'react-router-dom'
+import { Patient } from '../schemas/Patient'
+import { useGetPatients } from './apiCalls'
 import ListViewControls from '../components/ListViewControls'
 
 const DoctorMain = () => {
     // const { data, isLoading } = useGetPatients()
+    // console.log('query', otherData)
 
     // if (isLoading) {
     //     return <div>Loading...</div>
@@ -63,7 +64,7 @@ const DoctorMain = () => {
 
             <div className="grid grid-cols-3 my-4 px-2 font-bold break-all">
                 <p>Patient name</p>
-                <p className="">Prescriptions</p>
+                <p>Prescriptions</p>
                 <p>Last appointment</p>
             </div>
 
@@ -75,8 +76,8 @@ const DoctorMain = () => {
                                 className={`grid grid-cols-3 justify-between py-3 ${index !== data.length-1 ? 'border-b border-b-black' : ''}`}
                                 key={patient.id}
                             >
-                                <div className="">{patient.firstName} {patient.lastName}</div>
-                                <div className="">{patient.prescriptions?.length || 0}</div>
+                                <div>{patient.firstName} {patient.lastName}</div>
+                                <div>{patient.prescriptions?.length || 0}</div>
                                 <div>{patient.lastAppointment}</div>
                             </li>
                         </Link>

@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'
 import PrescriptionSection from './PrescriptionSection'
 import EditPatientModal from './EditPatientModal'
 import { useGetPatient } from './apiCalls'
-import { Patient } from '../types'
+import { Patient } from '../schemas/Patient'
 
 const PatientView = () => {
     // const { data, isLoading, isFetching } = useGetPatient()
@@ -18,16 +18,11 @@ const PatientView = () => {
     useEffect(() => {
         fetch(`http://localhost:4000/patients/${params.id}`).then((res) => res.json()).then(json => {
                 const expiredScripts = json.prescriptions.filter((script: any) => !Number(script.refills))
-                console.log('ex', json.prescriptions)
                 const activeScripts = json.prescriptions.filter((script: any) => Number(script.refills))
                 const newData = {...json, expiredScripts: expiredScripts, activeScripts: activeScripts}
                 return setData(newData)
             })
     }, [])
-
-    console.log(data)
-
-
 
     // if (isLoading || !data) {
     //     // the submitting behavior is really weird - it doesn't have id for a min so redirects to /
@@ -41,7 +36,7 @@ const PatientView = () => {
     return (
         <div className="md:py-10 md:px-20 bg-white w-[90%] mx-auto p-6 rounded my-10">
 
-            {showModal && <EditPatientModal setShowModal={setShowModal} />}
+            {showModal && <EditPatientModal setShowModal={() => setShowModal(false)} />}
 
             <div className="flex">
                 <h3 className="font-bold text-lg my-4 mr-10">

@@ -1,12 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useParams } from 'react-router-dom'
-
-export const createPatientFetcher = (url: string, formData: any) => fetch(url,
-    {
-        method: 'POST',
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData)
-    }).then(res => res.json())
+// import { Patient } from '../schemas/Patient'
 
 export const useGetPatient = () => {
     const params = useParams()
@@ -46,11 +40,10 @@ export const useUpdatePatient = (onSuccessFn: any) => {
     })
 }
 
-export const useCreatePatient = (onSuccessFn: any) => {
-    const params = useParams()
-
+export const useCreatePatient = (onSuccessFn: React.Dispatch<React.SetStateAction<string>>, formData: any) => {
     return useMutation({
-        mutationFn: (formData) => {
+        mutationFn: () => {
+            console.log('data', formData)
             return fetch('http://localhost:4000/patients',
                 {
                     method: 'POST',
@@ -68,6 +61,8 @@ export const useCreatePatient = (onSuccessFn: any) => {
 }
 
 export const useCreatePrescription = () => {
+    const queryClient = useQueryClient()
+
     return useMutation({
         mutationFn: (prescriptions) => {
             return fetch('http://localhost:4000/prescriptions',
@@ -75,12 +70,13 @@ export const useCreatePrescription = () => {
                     method: 'POST',
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ prescriptions })
-                }).then(res => res.json())
+                }).then(res => res.json()).then(data => data)
         },
-        onSuccess: (data) => {
-            // now I have this data - I need to have it on the user though
-            // so maybe this returns a user
-            console.log(data)
-        }
+        onSuccess: () => {
+            // NOT WORKING...
+            queryClient.invalidateQueries({ queryKey: ['prescriptions'] })
+            // queryClient.invalidateQueries({ queryKey: ['reminders'] })
+          },
+
     })
 }

@@ -17,6 +17,8 @@ const EditPatientModal = ({ setShowModal }: Props) => {
         prescriptions: [],
     })
 
+
+    // NEEDS TO UPDATE PAGE ON UPDATE
     const mutation: any = useUpdatePatient(setShowModal)
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

@@ -1,65 +1,55 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import{ Link }from 'react-router-dom'
 import { Patient } from '../schemas/Patient'
 import { useGetPatients } from './apiCalls'
 import ListViewControls from '../components/ListViewControls'
 
 const DoctorMain = () => {
-    // const { data, isLoading } = useGetPatients()
-    // console.log('query', otherData)
-
-    // if (isLoading) {
-    //     return <div>Loading...</div>
-    // }
-    const [data, setData] = useState([])
+    // RESET SEARCH TERM ON BUTTON CLICK
+    // ON CLICKING VIEW ALL
     const [searchTerm, setSearchTerm] = useState('')
     const [offset, setOffset] = useState(0)
 
-    useEffect(() => {
-        fetch(`http://localhost:4000/patients?offset=${offset}`).then((res) =>  res.json()).then(json => {
-            setData(json.patients)
-            setOffset(json.nextOffset || 0)
-        })
-    }, [])
+    const { data, isLoading } = useGetPatients(offset, searchTerm)
 
-    const handleSearch = (e: any) => {
-        e.preventDefault()
-        fetch(`http://localhost:4000/patients?name=${searchTerm}`).then((res) =>  res.json()).then(json => {
-            setData(json.patients)
-        })
+    if (isLoading) {
+        return <div>Loading...</div>
     }
+
+    const { patients = [], nextOffset = 0 } = data
 
     return (
         <div className="w-[90%] m-auto px-4">
             <div className="mt-4">
-                <form onSubmit={(e) => handleSearch(e)}>
+                <form>
+                    {/* CHANGE TO STARTS WITH? */}
                     <label className="mr-2">Search by last name</label>
                     <input
+                        // DEBOUNCE, SEARCH AFTER 3
                         onChange={(e) => setSearchTerm(e.target.value)}
                         value={searchTerm}
                         type="search"
                     />
-                    <button className="ml-2 text-white border border-white rounded px-2" type='submit'>Submit</button>
+                    <button
+                        className="ml-2 text-white border border-white rounded px-2"
+                        onClick={() => setSearchTerm('')}
+                        type='button'
+                    >
+                        Reset
+                    </button>
                 </form>
             </div>
 
+            {/* DONT PAGINATE SEARCH TERMS */}
             <ListViewControls
-                onGoBack={() => {
-                    // fetch 5 previous patients
-                    return fetch(`http://localhost:4000/patients?offset=${offset}`).then((res) =>  res.json()).then(json => {
-                        setData(json.patients)
-                        setOffset(json.nextOffset || 0)
-                    })
-                }}
+                onGoBack={() => setOffset(Math.max(offset - 5, 0))}
                 onGoForward={() => {
-                    // fetch next 5 patients disabled when no next offset
-                    return fetch(`http://localhost:4000/patients?offset=${offset}`).then((res) =>  res.json()).then(json => {
-                        setData(json.patients)
-                        setOffset(json.nextOffset || 0)
-                    })
+                    if (nextOffset !== null) {
+                        setOffset(offset + 5)
+                    }
                 }}
-                isGoBackDisabled={offset === 5}
-                isGoForwardDisabled={!offset}
+                isGoBackDisabled={nextOffset === 5}
+                isGoForwardDisabled={nextOffset === null}
             />
 
             <div className="grid grid-cols-3 my-4 px-2 font-bold break-all">
@@ -69,11 +59,11 @@ const DoctorMain = () => {
             </div>
 
             <ul className="bg-white rounded px-4">
-                {data?.map((patient: Patient, index: number) => {
+                {patients.map((patient: Patient, index: number) => {
                     return (
                         <Link key={patient.id} to={`/patients/${patient.id}`}>
                             <li
-                                className={`grid grid-cols-3 justify-between py-3 ${index !== data.length-1 ? 'border-b border-b-black' : ''}`}
+                                className={`grid grid-cols-3 justify-between py-3 ${index !== patients.length-1 ? 'border-b border-b-black' : ''}`}
                                 key={patient.id}
                             >
                                 <div>{patient.firstName} {patient.lastName}</div>

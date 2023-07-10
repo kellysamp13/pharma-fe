@@ -6,32 +6,17 @@ import { useGetPatient } from './apiCalls'
 import { Patient } from '../schemas/Patient'
 
 const PatientView = () => {
-    // const { data, isLoading, isFetching } = useGetPatient()
+    const { data, isLoading, isFetching } = useGetPatient()
 
     const [showModal, setShowModal] = useState<boolean>(false)
 
-    const [data, setData] = useState<Patient | null>(null)
+    // const [data, setData] = useState<Patient | null>(null)
     // const [searchTerm, setSearchTerm] = useState('')
 
-    const params = useParams()
-
-    useEffect(() => {
-        fetch(`http://localhost:4000/patients/${params.id}`).then((res) => res.json()).then(json => {
-                const expiredScripts = json.prescriptions.filter((script: any) => !Number(script.refills))
-                const activeScripts = json.prescriptions.filter((script: any) => Number(script.refills))
-                const newData = {...json, expiredScripts: expiredScripts, activeScripts: activeScripts}
-                return setData(newData)
-            })
-    }, [])
-
-    // if (isLoading || !data) {
-    //     // the submitting behavior is really weird - it doesn't have id for a min so redirects to /
-    //     return <div>Loading...</div>
-    // }
-
-    // if (!data?.id && !isLoading && !isFetching) {
-    //     return <Navigate to='/'/>
-    // }
+    if (isLoading || isFetching) {
+        // the submitting behavior is really weird - it doesn't have id for a min so redirects to /
+        return <div>Loading...</div>
+    }
 
     return (
         <div className="md:py-10 md:px-20 bg-white w-[90%] mx-auto p-6 rounded my-10">

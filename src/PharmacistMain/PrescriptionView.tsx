@@ -1,25 +1,18 @@
-import { Link, useParams } from 'react-router-dom'
-import { PrescriptionStatus } from '../schemas/Prescription'
 import React, { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
+import { PrescriptionStatus } from '../schemas/Prescription'
 import { useGetPrescription, useMutatePrescription } from './apiCalls'
 
 const PrescriptionView = () => {
     const [status, setStatus] = useState<PrescriptionStatus | null>(null)
 
-    // const { data } = useGetPrescription()
-    const [data, setData] = useState<any>([])
+    const { data } = useGetPrescription()
     const mutation = useMutatePrescription(setStatus)
 
     // getting an error for mutate when removing any
-    const handleChange = (e: React.ChangeEvent<HTMLSelectElement> | any) => {
+    const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         mutation.mutate(e.target.value)
     }
-
-    const params = useParams()
-
-    useEffect(() => {
-        fetch(`http://localhost:4000/prescriptions/${params.id}`).then((res) =>  res.json()).then(json => setData(json))
-    }, [])
 
     useEffect(() => {
         if (data?.status) {

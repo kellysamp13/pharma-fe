@@ -1,13 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
 
-export const useGetPatients = () => {
+export const useGetPatients = (offset: number, searchTerm: string) => {
     return useQuery({
-        queryKey: ['patients'],
-        queryFn: () => {
-            return fetch('http://localhost:4000/patients').then((res) => {
-                console.log('here!', res)
-               return res.json()
-            })
-        }
+        queryKey: ['patients', offset, searchTerm],
+        queryFn: () => fetch(`http://localhost:4000/patients?offset=${offset}&name=${searchTerm}`).then((res) => res.json())
     })
 }

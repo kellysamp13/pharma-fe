@@ -13,8 +13,7 @@ const CreatePatient = () => {
         phone: '',
     })
     const [userId, setUserId] = useState<string>('')
-
-    const mutation = useCreatePatient(setUserId)
+    const mutation = useCreatePatient(setUserId, formData)
 
     if (userId) {
         return <Navigate to={`/patients/${userId}`}/>
@@ -22,18 +21,12 @@ const CreatePatient = () => {
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({...formData, [e.target.name]: e.target.value})
-        // where should we trim
-        // need to handle adding prescription - different handle event?
     }
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         mutation.mutate()
     }
-
-    // if (data?.id) {
-    //     return <Navigate to={`/patients/${data.id}`}/>
-    // }
 
     return (
         <div className="w-[80%] m-auto bg-white rounded my-10">

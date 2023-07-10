@@ -7,9 +7,10 @@ import { useCreatePrescription } from './apiCalls'
 
 interface Props {
     patientData: Patient | null
+    refetchPatient: () => void
 }
 
-const PrescriptionSection = ({ patientData }: Props) => {
+const PrescriptionSection = ({ patientData, refetchPatient }: Props) => {
     const params = useParams()
     const isProviderView = sessionStorage.getItem('viewType') === 'provider'
 
@@ -21,14 +22,13 @@ const PrescriptionSection = ({ patientData }: Props) => {
         userId: String(params.id || ''),
     })
 
-    const mutation: any = useCreatePrescription()
+    const mutation = useCreatePrescription(refetchPatient)
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         mutation.mutate(prescriptions)
     }
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        // update local state
         setPrescriptions({...prescriptions, [e.target.name]: e.target.value})
     }
 
@@ -38,7 +38,7 @@ const PrescriptionSection = ({ patientData }: Props) => {
         <>
             <h3 className="font-bold text-lg my-4">Active Prescriptions</h3>
             <ul>
-                {patientData?.activeScripts?.length ? patientData?.activeScripts.map((script: any) => {
+                {patientData?.activeScripts?.length ? patientData?.activeScripts.map((script: Prescription) => {
                     return (
                         <li key={script.id} className="grid grid-cols-4 mb-2">
                             <div>{script.name}</div>
@@ -53,7 +53,7 @@ const PrescriptionSection = ({ patientData }: Props) => {
 
             <h3 className="font-bold text-lg my-4">Expired Prescriptions</h3>
             <ul>
-                {patientData?.expiredScripts?.length ? patientData?.expiredScripts?.map((script: any) => {
+                {patientData?.expiredScripts?.length ? patientData?.expiredScripts?.map((script: Prescription) => {
                     return (
                         <li key={script.id} className="grid grid-cols-4 mb-2">
                             <div>{script.name}</div>

@@ -6,7 +6,7 @@ export enum PrescriptionStatus {
     IN_PROGRESS = 'In Progress'
 }
 
-const PrescriptionSchema = z.object({
+export const PrescriptionSchema = z.object({
     name: z.string(),
     refills: z.number(),
     status: z.nativeEnum(PrescriptionStatus),

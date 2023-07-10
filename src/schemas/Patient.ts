@@ -1,18 +1,18 @@
 import { z } from 'zod'
-// import { Prescription } from './Prescription'
+import { PrescriptionSchema } from './Prescription'
 
 const PatientSchema = z.object({
-    firstName: z.string(),
-    lastName: z.string(),
+    activeScripts: z.array(PrescriptionSchema).optional(),
     email: z.string().email(),
-    phone: z.string(),
-    lastAppointment: z.string().nullable(),
+    expiredScripts: z.array(PrescriptionSchema).optional(),
+    firstName: z.string(),
     // won't have an ID for POST, will for GET
     id: z.string().optional(),
-    // how to represent an array of objects
-    prescriptions: z.array(z.object({})).optional(),
-    activeScripts: z.array(z.object({})).optional(),
-    expiredScripts: z.array(z.object({})).optional(),
+    lastAppointment: z.string().nullable(),
+    lastName: z.string(),
+    phone: z.string(),
+    // a patient profile can exist with no prescriptions
+    prescriptions: z.array(PrescriptionSchema).optional(),
 })
 
 export type Patient = z.infer<typeof PatientSchema>

@@ -3,14 +3,15 @@ import{ Link }from 'react-router-dom'
 import { Patient } from '../schemas/Patient'
 import { useGetPatients } from './apiCalls'
 import ListViewControls from '../components/ListViewControls'
+import { useDebounce } from '../utils'
 
 const DoctorMain = () => {
-    // RESET SEARCH TERM ON BUTTON CLICK
     // ON CLICKING VIEW ALL
     const [searchTerm, setSearchTerm] = useState('')
     const [offset, setOffset] = useState(0)
+    const debouncedSearchTerm = useDebounce(searchTerm)
 
-    const { data, isLoading } = useGetPatients(offset, searchTerm)
+    const { data, isLoading } = useGetPatients(offset, debouncedSearchTerm)
 
     if (isLoading) {
         return <div>Loading...</div>
@@ -22,13 +23,11 @@ const DoctorMain = () => {
         <div className="w-[90%] m-auto px-4">
             <div className="mt-4">
                 <form>
-                    {/* CHANGE TO STARTS WITH? */}
                     <label className="mr-2">Search by last name</label>
                     <input
-                        // DEBOUNCE, SEARCH AFTER 3
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        value={searchTerm}
                         type="search"
+                        value={searchTerm}
                     />
                     <button
                         className="ml-2 text-white border border-white rounded px-2"
@@ -40,7 +39,6 @@ const DoctorMain = () => {
                 </form>
             </div>
 
-            {/* DONT PAGINATE SEARCH TERMS */}
             <ListViewControls
                 onGoBack={() => setOffset(Math.max(offset - 5, 0))}
                 onGoForward={() => {
@@ -48,7 +46,7 @@ const DoctorMain = () => {
                         setOffset(offset + 5)
                     }
                 }}
-                isGoBackDisabled={nextOffset === 5}
+                isGoBackDisabled={nextOffset === 5 || !!searchTerm}
                 isGoForwardDisabled={nextOffset === null}
             />
 

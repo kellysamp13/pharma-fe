@@ -4,10 +4,11 @@ import { useUpdatePatient } from './apiCalls'
 import { useState } from 'react'
 
 interface Props {
+    refetchPatient: () => void
     setShowModal: () => void
 }
 
-const EditPatientModal = ({ setShowModal }: Props) => {
+const EditPatientModal = ({ setShowModal, refetchPatient }: Props) => {
     const [formData, setFormData] = useState<Patient>({
         email: '',
         firstName: '',
@@ -17,9 +18,7 @@ const EditPatientModal = ({ setShowModal }: Props) => {
         prescriptions: [],
     })
 
-
-    // NEEDS TO UPDATE PAGE ON UPDATE
-    const mutation: any = useUpdatePatient(setShowModal)
+    const mutation = useUpdatePatient(setShowModal, refetchPatient)
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({...formData, [e.target.name]: e.target.value})

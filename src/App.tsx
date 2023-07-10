@@ -21,6 +21,7 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
+        {/* NAVIGATION SECTION */}
         <div className="flex bg-teal-600 py-3 border-b border-b-white">
           <div className="w-[90%] m-auto ">
             <Link
@@ -28,18 +29,22 @@ function App() {
               to='/'>
                 View all {isProviderView ? 'patients' : 'prescriptions'}
             </Link>
+
             {isProviderView && <Link className='px-4 py-1 font-bold rounded text-white' to='/addpatient'>Add a new patient</Link>}
+
             <button
-              onClick={() => {
-                const newView = isProviderView ? 'pharmacist' : 'provider'
-                sessionStorage.setItem('viewType', newView)
-                setViewType(newView)
-              }}
-              className='px-4 py-1 font-bold rounded text-white'>
+                className='px-4 py-1 font-bold rounded text-white'
+                onClick={() => {
+                  const newView = isProviderView ? 'pharmacist' : 'provider'
+                  sessionStorage.setItem('viewType', newView)
+                  setViewType(newView)
+                }}
+              >
                 Change to {isProviderView ? 'pharmacist' : 'provider'} view
               </button>
             </div>
         </div>
+
         <Routes>
           <Route path='/' element={isProviderView ? <DoctorMain/> : <PharmacistMain />}/>
           <Route path='/addpatient' element={<CreatePatient />}/>

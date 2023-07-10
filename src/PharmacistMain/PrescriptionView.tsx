@@ -6,10 +6,9 @@ import { useGetPrescription, useMutatePrescription } from './apiCalls'
 const PrescriptionView = () => {
     const [status, setStatus] = useState<PrescriptionStatus | null>(null)
 
-    const { data } = useGetPrescription()
-    const mutation = useMutatePrescription(setStatus)
+    const { data, refetch } = useGetPrescription()
+    const mutation = useMutatePrescription(refetch)
 
-    // getting an error for mutate when removing any
     const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         mutation.mutate(e.target.value)
     }

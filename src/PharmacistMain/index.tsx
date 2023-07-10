@@ -3,15 +3,15 @@ import { Link } from 'react-router-dom'
 import { useGetPrescriptions } from './apiCalls'
 import { useState } from 'react'
 import ListViewControls from '../components/ListViewControls'
+import { useDebounce } from '../utils'
 
 const PharmacistMain = () => {
     const [searchTerm, setSearchTerm] = useState('')
     const [offset, setOffset] = useState(0)
     const [filters, setFilters] = useState<string[]>([])
+    const debouncedSearchTerm = useDebounce(searchTerm)
 
-    const { data, isFetching, isLoading } = useGetPrescriptions(searchTerm, offset, filters)
-
-    // const debouncedFilter = useDebounce(filter, 500)
+    const { data, isFetching, isLoading } = useGetPrescriptions(debouncedSearchTerm, offset, filters)
 
     if (isFetching && isLoading) {
         return <div>Loading...</div>
@@ -19,63 +19,36 @@ const PharmacistMain = () => {
 
     const { prescriptions = [], nextOffset = 0 } = data
 
-    // const handleSubmit = (e: any) => {
-    //     e.preventDefault()
-    //     const filterString = filters.join(',')
-    //     // useGetPrescriptions(searchTerm)
-    //     // fetch(`http://localhost:4000/prescriptions?filters=${filterString}`).then((res) =>  res.json()).then(json => {
-    //     //     // setData(json.prescriptions)
-    //     //     setOffset(json.nextOffset)
-    //     // })
-    // }
-
     return (
         <div className="w-[90%] m-auto px-4 pb-10">
             <form className="flex">
                 <div className="mr-3 flex flex-col justify-center">
-                    <p>Filter by status</p>
+                    Filter by status
                 </div>
 
                 <div>
-                    <div>
-                        <input
-                            checked={filters.includes('in progress')}
-                            className="mr-2"
-                            type="checkbox"
-                            onChange={() => {
-                                const newFilters = filters.includes('in progress') ?
-                                    filters.filter(filter => filter !== 'in progress') : [...filters, 'in progress']
-                                setFilters(newFilters)
-                            }}
-                        />
-                        <label>In progress</label>
-                    </div>
-                    <div>
-                        <input
-                            checked={filters.includes('pending')}
-                            className="mr-2"
-                            onChange={() => {
-                                const newFilters = filters.includes('pending') ?
-                                    filters.filter(filter => filter !== 'pending') : [...filters, 'pending']
-                                setFilters(newFilters)
-                            }}
-                            type="checkbox"
-                        />
-                        <label>Pending</label>
-                    </div>
-                    <div>
-                        <input
-                            checked={filters.includes('filled')}
-                            className="mr-2"
-                            type="checkbox"
-                            onChange={() => {
-                                const newFilters = filters.includes('filled') ?
-                                    filters.filter(filter => filter !== 'filled') : [...filters, 'filled']
-                                setFilters(newFilters)
-                            }}
-                        />
-                        <label>Filled</label>
-                    </div>
+                    {['In progress', 'Pending', 'Filled'].map(statusOption => (
+                        <div key={statusOption}>
+                            <input
+                                checked={filters.includes(statusOption)}
+                                className="mr-2"
+                                type="checkbox"
+                                onChange={() => {
+                                    const newFilters = filters.includes(statusOption) ?
+                                        filters.filter(filter => filter !== statusOption) : [...filters, statusOption]
+                                    setFilters(newFilters)
+                                }}
+                            />
+                            <label>{statusOption}</label>
+                        </div>
+                    ))}
+                    <button
+                        className="ml-2 text-white border border-white rounded px-2"
+                        onClick={() => setFilters([])}
+                        type='button'
+                    >
+                        Reset
+                    </button>
                 </div>
             </form>
 
@@ -87,9 +60,15 @@ const PharmacistMain = () => {
                         type="search"
                         value={searchTerm}
                     />
+                    <button
+                        className="ml-2 text-white border border-white rounded px-2"
+                        onClick={() => setSearchTerm('')}
+                        type='button'
+                    >
+                        Reset
+                    </button>
                 </form>
             </div>
-
 
             <ListViewControls
                 onGoBack={() => setOffset(Math.max(offset - 5, 0))}
@@ -98,7 +77,7 @@ const PharmacistMain = () => {
                         setOffset(offset + 5)
                     }
                 }}
-                isGoBackDisabled={nextOffset === 5}
+                isGoBackDisabled={nextOffset === 5 || !!searchTerm || !!filters}
                 isGoForwardDisabled={nextOffset === null}
             />
 

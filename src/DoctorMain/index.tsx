@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import{ Link }from 'react-router-dom'
+import{ Link, Navigate }from 'react-router-dom'
 import { Patient } from '../schemas/Patient'
 import { useGetPatients } from '../apiCalls'
 import ListViewControls from '../components/ListViewControls'
@@ -10,11 +10,15 @@ const DoctorMain = () => {
     const [offset, setOffset] = useState(0)
     const debouncedSearchTerm = useDebounce(searchTerm)
 
-    const { data, isLoading } = useGetPatients(offset, debouncedSearchTerm)
+    const { data, isLoading, isFetching, isError } = useGetPatients(offset, debouncedSearchTerm)
 
-    if (isLoading) {
+    if (isLoading || isFetching) {
         return <div>Loading...</div>
     }
+
+    if (isError) {
+        return <Navigate to='/error' />
+     }
 
     const { patients = [], nextOffset = 0 } = data
 

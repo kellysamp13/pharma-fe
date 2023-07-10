@@ -19,6 +19,10 @@ const CreatePatient = () => {
         return <Navigate to={`/patients/${userId}`}/>
     }
 
+    if (mutation.isError) {
+        return <Navigate to='/error' />
+    }
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({...formData, [e.target.name]: e.target.value})
     }

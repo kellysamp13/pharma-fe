@@ -25,7 +25,7 @@ const AddPrescriptionForm = ({
             </div>
 
 
-            <div className="mb-6">
+            <div className="mb-6 flex flex-col md:flex-row">
                 <label className="mr-3" htmlFor="refills">Number of refills</label>
                 <input
                     id="refills"

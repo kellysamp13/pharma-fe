@@ -2,6 +2,7 @@ import { Patient } from '../schemas/Patient';
 import PatientForm from '../components/PatientForm';
 import { useUpdatePatient } from '../apiCalls'
 import { useState } from 'react'
+import { Navigate } from 'react-router-dom'
 
 interface Props {
     refetchPatient: () => void
@@ -27,6 +28,10 @@ const EditPatientModal = ({ setShowModal, refetchPatient }: Props) => {
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         mutation.mutate(formData)
+    }
+
+    if (mutation.isError) {
+        return <Navigate to='/error' />
     }
 
     return (

@@ -1,5 +1,5 @@
 import { useQuery, useMutation } from '@tanstack/react-query'
-import { useParams } from 'react-router-dom'
+import { useParams, Navigate } from 'react-router-dom'
 import { Prescription } from './schemas/Prescription'
 import { Patient } from './schemas/Patient'
 
@@ -8,11 +8,11 @@ import { Patient } from './schemas/Patient'
 export const useGetPrescriptions = (searchTerm: string, offset: number, filters: string[]) => {
     return useQuery({
         queryKey: ['prescriptions', searchTerm, offset, filters],
-        queryFn: () => {
+        queryFn: async () => {
           const formattedFilters = filters.join(',').toLowerCase()
            return fetch(`http://localhost:4000/prescriptions?name=${searchTerm}&offset=${offset}&filters=${formattedFilters}`)
            .then((res) => res.json())
-        }
+        },
     })
 }
 
@@ -61,11 +61,17 @@ export const useCreatePrescription = (refetch: () => void) => useMutation({
     onSuccess: () => refetch(),
 })
 
+interface UpdateArgs {
+    id?: string,
+    name?: string,
+    refills?: number,
+    status?: string,
+}
 export const useUpdatePrescription = (refetch: () => void) => {
     const params = useParams()
 
     return useMutation({
-        mutationFn: ({status, refills, name, id }: { status?: string, refills?: number, name?: string, id?: string }): Promise<Prescription[]> => {
+        mutationFn: ({ status, refills, name, id }: UpdateArgs): Promise<Prescription[]> => {
             return fetch(`http://localhost:4000/prescriptions/${id || params.id}`, {
                 method: 'PUT',
                 headers: { "Content-Type": "application/json" },
@@ -91,7 +97,7 @@ export const useCreatePatient = (onSuccessFn: React.Dispatch<React.SetStateActio
         onSuccess: (data) => {
             // set the id in state, so we know to redirect to the new user's profile page
             onSuccessFn(data.id)
-        }
+        },
     })
 }
 

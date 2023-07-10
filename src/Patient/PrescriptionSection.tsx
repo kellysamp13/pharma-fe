@@ -5,6 +5,7 @@ import { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useCreatePrescription } from '../apiCalls'
 import EditPrescriptionModal from './EditPrescriptionModal'
+import { Navigate } from 'react-router-dom'
 
 interface Props {
     patientData: Patient | null
@@ -42,11 +43,14 @@ const PrescriptionSection = ({ patientData, refetchPatient }: Props) => {
         setPrescriptions({...prescriptions, [e.target.name]: e.target.value})
     }
 
+    if (createScriptMutation.isError) {
+        return <Navigate to='/error' />
+    }
+
     return (
         <>
             {showModal ? (
                 <EditPrescriptionModal
-                    script={editedScript}
                     hideModal={() => {
                         setShowModal(false)
                         setEditedScript({
@@ -57,19 +61,26 @@ const PrescriptionSection = ({ patientData, refetchPatient }: Props) => {
                         })
                     }}
                     refetchPatient={refetchPatient}
+                    script={editedScript}
                 />
             ) : null}
 
             <h3 className="font-bold text-lg my-4">Active Prescriptions</h3>
-            <ul>
+            <ul className="border-t border-t-black">
                 {patientData?.activeScripts?.length ? patientData?.activeScripts.map((script: Prescription) => {
                     return (
-                        <li key={script.id} className="grid grid-cols-4 mb-2">
-                            <div>{script.name}</div>
-                            <div>{script.status}</div>
-                            <div>Refills: {script.refills}</div>
+                        <li
+                            key={script.id}
+                            className={`flex justify-between items-center mb-2 py-2 border-b border-b-black`}
+                        >
+                            <div className="w-[80%] md:grid md:grid-cols-4 md:gap-4">
+                                <div>{script.name}</div>
+                                <div>{script.status}</div>
+                                <div>Refills: {script.refills}</div>
+                            </div>
+
                             <button
-                                className='px-4 text-sm py-1 font-bold rounded text-white bg-teal-700'
+                                className='px-4 text-sm py-1 h-[2rem] font-bold rounded text-white bg-teal-700'
                                 onClick={() => {
                                     setShowModal(true)
                                     setEditedScript({
@@ -88,15 +99,20 @@ const PrescriptionSection = ({ patientData, refetchPatient }: Props) => {
             </ul>
 
             <h3 className="font-bold text-lg my-4">Expired Prescriptions</h3>
-            <ul>
+            <ul className="border-t border-t-black">
                 {patientData?.expiredScripts?.length ? patientData?.expiredScripts?.map((script: Prescription) => {
                     return (
-                        <li key={script.id} className="grid grid-cols-4 mb-2">
-                            <div>{script.name}</div>
-                            <div>{script.status}</div>
-                            <div>Refills: {script.refills}</div>
+                        <li
+                            key={script.id}
+                            className={`flex justify-between items-center mb-2 py-2 border-b border-b-black`}
+                        >
+                            <div className="w-[80%] md:grid md:grid-cols-4">
+                                <div>{script.name}</div>
+                                <div>{script.status}</div>
+                                <div>Refills: {script.refills}</div>
+                            </div>
                             <button
-                                className='px-4 text-sm py-1 font-bold rounded text-white bg-teal-700'
+                                className='px-4 text-sm py-1 font-bold rounded text-white bg-teal-700 h-[2rem]'
                                 onClick={() => {
                                     setShowModal(true)
                                     setEditedScript({

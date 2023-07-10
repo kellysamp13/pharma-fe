@@ -2,15 +2,20 @@ import { useState } from 'react'
 import PrescriptionSection from './PrescriptionSection'
 import EditPatientModal from './EditPatientModal'
 import { useGetPatient } from '../apiCalls'
+import { Navigate } from 'react-router-dom'
 
 const PatientView = () => {
-    const { data, isLoading, isFetching, refetch: refetchPatient } = useGetPatient()
+    const { data, isLoading, isFetching, isError, refetch: refetchPatient } = useGetPatient()
 
     const [showModal, setShowModal] = useState<boolean>(false)
 
     if (isLoading || isFetching) {
         return <div>Loading...</div>
     }
+
+    if (isError) {
+        return <Navigate to='/error' />
+     }
 
     return (
         <div className="md:py-10 md:px-20 bg-white w-[90%] mx-auto p-6 rounded my-10">

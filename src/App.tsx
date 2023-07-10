@@ -11,6 +11,7 @@ import DoctorMain from './DoctorMain';
 import PatientView from './Patient'
 import PharmacistMain from './PharmacistMain';
 import PrescriptionView from './PharmacistMain/PrescriptionView';
+import ErrorPage from './ErrorPage';
 
 const queryClient = new QueryClient()
 
@@ -50,6 +51,7 @@ function App() {
           <Route path='/addpatient' element={<CreatePatient />}/>
           <Route path='/patients/:id' element={<PatientView />}/>
           <Route path='/prescriptions/:id' element={<PrescriptionView />}/>
+          <Route path='/error' element={<ErrorPage />}/>
         </Routes>
       </BrowserRouter>
     </QueryClientProvider>

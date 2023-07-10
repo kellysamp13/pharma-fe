@@ -1,5 +1,5 @@
 import { Prescription } from '../schemas/Prescription'
-import { Link } from 'react-router-dom'
+import { Link, Navigate } from 'react-router-dom'
 import { useGetPrescriptions } from '../apiCalls'
 import { useState } from 'react'
 import ListViewControls from '../components/ListViewControls'
@@ -11,18 +11,23 @@ const PharmacistMain = () => {
     const [filters, setFilters] = useState<string[]>([])
     const debouncedSearchTerm = useDebounce(searchTerm)
 
-    const { data, isFetching, isLoading } = useGetPrescriptions(debouncedSearchTerm, offset, filters)
+    const { data, isFetching, isLoading, isError } = useGetPrescriptions(debouncedSearchTerm, offset, filters)
 
     if (isFetching && isLoading) {
         return <div>Loading...</div>
+    }
+
+    if (isError) {
+       return <Navigate to='/error' />
     }
 
     const { prescriptions = [], nextOffset = 0 } = data
 
     return (
         <div className="w-[90%] m-auto px-4 pb-10">
-            <div className="flex justify-between bg-white p-4 rounded mt-4">
-                <form className="flex">
+
+            <div className="md:flex-row flex-col flex justify-between bg-white p-4 rounded mt-4">
+                <form className="flex mb-4">
                     <div className="mr-3 flex flex-col justify-center">
                         Filter by status
                         <button
@@ -72,7 +77,7 @@ const PharmacistMain = () => {
                     </button>
                     </div>
                 </form>
-        </div>
+            </div>
 
             <ListViewControls
                 onGoBack={() => setOffset(Math.max(offset - 5, 0))}

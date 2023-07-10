@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, Navigate } from 'react-router-dom'
 import { PrescriptionStatus } from '../schemas/Prescription'
 import { useGetPrescription, useUpdatePrescription } from '../apiCalls'
 
 const PrescriptionView = () => {
     const [status, setStatus] = useState<PrescriptionStatus | null>(null)
 
-    const { data, refetch } = useGetPrescription()
+    const { data, isLoading, isFetching, isError, refetch } = useGetPrescription()
     const mutation = useUpdatePrescription(refetch)
 
     const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -18,6 +18,14 @@ const PrescriptionView = () => {
             setStatus(data.status)
         }
     }, [data])
+
+    if (isLoading || isFetching) {
+        return <div>Loading...</div>
+    }
+
+    if (isError || mutation.isError) {
+        return <Navigate to='/error' />
+     }
 
     return (
         <div className="py-10 px-20 bg-white w-[90%] mx-auto p-6 rounded my-10">

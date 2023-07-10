@@ -29,6 +29,7 @@ const PrescriptionSection = ({ patientData, refetchPatient }: Props) => {
         name: '',
         id: '',
         refills: 0,
+        status: '',
     })
 
     const createScriptMutation = useCreatePrescription(refetchPatient)
@@ -52,6 +53,7 @@ const PrescriptionSection = ({ patientData, refetchPatient }: Props) => {
                             name: '',
                             id: '',
                             refills: 0,
+                            status: '',
                         })
                     }}
                     refetchPatient={refetchPatient}
@@ -67,13 +69,14 @@ const PrescriptionSection = ({ patientData, refetchPatient }: Props) => {
                             <div>{script.status}</div>
                             <div>Refills: {script.refills}</div>
                             <button
-                                className='px-4 text-sm py-1 font-bold rounded text-white bg-teal-600'
+                                className='px-4 text-sm py-1 font-bold rounded text-white bg-teal-700'
                                 onClick={() => {
                                     setShowModal(true)
                                     setEditedScript({
                                         name: script.name,
                                         id: script.id,
                                         refills: script.refills,
+                                        status: '',
                                     })
                                 }}
                             >
@@ -81,7 +84,7 @@ const PrescriptionSection = ({ patientData, refetchPatient }: Props) => {
                             </button>
                         </li>
                     )
-                }): <div>No active prescriptions.</div>}
+                }): <li>No active prescriptions.</li>}
             </ul>
 
             <h3 className="font-bold text-lg my-4">Expired Prescriptions</h3>
@@ -93,13 +96,14 @@ const PrescriptionSection = ({ patientData, refetchPatient }: Props) => {
                             <div>{script.status}</div>
                             <div>Refills: {script.refills}</div>
                             <button
-                                className='px-4 text-sm py-1 font-bold rounded text-white bg-teal-600'
+                                className='px-4 text-sm py-1 font-bold rounded text-white bg-teal-700'
                                 onClick={() => {
                                     setShowModal(true)
                                     setEditedScript({
                                         name: script.name,
                                         id: script.id,
                                         refills: script.refills,
+                                        status: script.status,
                                     })
                                 }}
                             >
@@ -107,14 +111,14 @@ const PrescriptionSection = ({ patientData, refetchPatient }: Props) => {
                             </button>
                         </li>
                     )
-                }): <div>No expired prescriptions.</div>}
+                }): <li>No expired prescriptions.</li>}
             </ul>
 
             {isProviderView ? <>
                 <h3 className="font-bold text-lg my-4">
                     Add New Prescription
                     <button
-                        className='px-4 text-sm py-1 font-bold rounded text-white bg-teal-600 ml-3'
+                        className='px-4 text-sm py-1 font-bold rounded text-white bg-teal-700 ml-3'
                         onClick={() => setExpandedAdd(!expandedAdd)}
                     >
                         {expandedAdd ? '-' : '+'}

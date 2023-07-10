@@ -22,7 +22,7 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         {/* NAVIGATION SECTION */}
-        <div className="flex bg-teal-600 py-3 border-b border-b-white">
+        <div className="flex bg-teal-700 py-3 border-b border-b-white">
           <div className="w-[90%] m-auto ">
             <Link
               className='px-4 py-1 font-bold rounded text-white'

@@ -30,7 +30,7 @@ const EditPatientModal = ({ setShowModal, refetchPatient }: Props) => {
     }
 
     return (
-        <div className="absolute z-10 bg-white rounded md:h-[70%] w-[70%] top-2 border-2 border-teal-600">
+        <div className="absolute z-10 bg-white rounded md:h-[70%] w-[70%] top-2 border-2 border-teal-700">
             <button
                 className="absolute right-4 top-2 font-bold"
                 onClick={setShowModal}

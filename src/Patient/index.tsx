@@ -22,7 +22,7 @@ const PatientView = () => {
                     Patient Info
                     <button
                         onClick={() => setShowModal(true)}
-                        className='md:ml-3 px-4 text-sm py-1 font-bold rounded text-white bg-teal-600'
+                        className='md:ml-3 px-4 text-sm py-1 font-bold rounded text-white bg-teal-700'
                     >
                         Edit
                     </button>

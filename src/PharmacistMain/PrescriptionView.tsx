@@ -40,7 +40,7 @@ const PrescriptionView = () => {
             </form>
 
             <Link
-                className="text-teal-600 font-bold"
+                className="text-teal-700 font-bold"
                 to={`/patients/${data?.userId}`}
             >
                 View Patient Info

@@ -97,7 +97,7 @@ const PatientForm = ({
 
             <div className="flex flex-col items-center mt-10">
                 <button
-                    className={`px-4 py-2 font-bold rounded text-white ${disableSubmit ? 'bg-slate-300' : 'bg-teal-600'}`}
+                    className={`px-4 py-2 font-bold rounded text-white ${disableSubmit ? 'bg-slate-300' : 'bg-teal-700'}`}
                     disabled={disableSubmit}
                     type="submit"
                 >

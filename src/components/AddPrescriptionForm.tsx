@@ -39,7 +39,7 @@ const AddPrescriptionForm = ({
         </div>
         <div className="flex justify-center mt-5">
             <button
-                className={`px-4 py-1 font-bold rounded text-white ${!data.name ? 'bg-slate-300' : 'bg-teal-600'}`}
+                className={`px-4 py-1 font-bold rounded text-white ${!data.name ? 'bg-slate-300' : 'bg-teal-700'}`}
                 disabled={!data.name}
                 type="submit"
             >

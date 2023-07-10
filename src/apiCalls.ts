@@ -65,7 +65,7 @@ export const useUpdatePrescription = (refetch: () => void) => {
     const params = useParams()
 
     return useMutation({
-        mutationFn: ({status, refills, name, id}: { status?: string, refills?: number, name?: string, id?: string }): Promise<Prescription[]> => {
+        mutationFn: ({status, refills, name, id }: { status?: string, refills?: number, name?: string, id?: string }): Promise<Prescription[]> => {
             return fetch(`http://localhost:4000/prescriptions/${id || params.id}`, {
                 method: 'PUT',
                 headers: { "Content-Type": "application/json" },

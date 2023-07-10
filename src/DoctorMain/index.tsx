@@ -20,16 +20,17 @@ const DoctorMain = () => {
 
     return (
         <div className="w-[90%] m-auto px-4">
-            <div className="mt-4">
+            <div className="mt-4 bg-white rounded p-4 flex justify-center">
                 <form>
-                    <label className="mr-2">Search by last name</label>
+                    <label htmlFor="search" className="mr-2">Search by last name</label>
                     <input
+                        id="search"
                         onChange={(e) => setSearchTerm(e.target.value)}
                         type="search"
                         value={searchTerm}
                     />
                     <button
-                        className="ml-2 text-white border border-white rounded px-2"
+                        className="ml-2 text-white bg-teal-700 font-bold rounded px-2"
                         onClick={() => setSearchTerm('')}
                         type='button'
                     >
@@ -58,16 +59,17 @@ const DoctorMain = () => {
             <ul className="bg-white rounded px-4">
                 {patients.map((patient: Patient, index: number) => {
                     return (
-                        <Link key={patient.id} to={`/patients/${patient.id}`}>
-                            <li
+                        <li key={patient.id}>
+                            <Link
                                 className={`grid grid-cols-3 justify-between py-3 ${index !== patients.length-1 ? 'border-b border-b-black' : ''}`}
                                 key={patient.id}
+                                to={`/patients/${patient.id}`}
                             >
                                 <div>{patient.firstName} {patient.lastName}</div>
                                 <div>{patient.lastAppointment}</div>
                                 <div>{patient.phone}</div>
-                            </li>
-                        </Link>
+                            </Link>
+                        </li>
                     )
                 })}
             </ul>

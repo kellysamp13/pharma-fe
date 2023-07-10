@@ -6,7 +6,7 @@ import {
   QueryClientProvider,
 } from '@tanstack/react-query'
 
-import CreatePatient from "./DoctorMain/CreatePatient"
+import CreatePatient from './DoctorMain/CreatePatient'
 import DoctorMain from './DoctorMain';
 import PatientView from './Patient'
 import PharmacistMain from './PharmacistMain';
@@ -23,26 +23,36 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         {/* NAVIGATION SECTION */}
-        <div className="flex bg-teal-700 py-3 border-b border-b-white">
-          <div className="w-[90%] m-auto ">
+        <div className='bg-teal-700 py-3 border-b border-b-white'>
+          <div className='justify-around flex flex-col md:flex-row px-4 md:max-w-[80%] md:m-auto'>
             <Link
-              className='px-4 py-1 font-bold rounded text-white'
-              to='/'>
-                View all {isProviderView ? 'patients' : 'prescriptions'}
+              className='flex items-center px-2 w-[12rem] justify-center font-bold rounded text-white border border-white mr-2 mb-2 md:mb-0 h-[2rem]'
+              to='/'
+            >
+              View all {isProviderView ? 'patients' : 'prescriptions'}
             </Link>
 
-            {isProviderView && <Link className='px-4 py-1 font-bold rounded text-white' to='/addpatient'>Add a new patient</Link>}
-
-            <button
-                className='px-4 py-1 font-bold rounded text-white'
-                onClick={() => {
-                  const newView = isProviderView ? 'pharmacist' : 'provider'
-                  sessionStorage.setItem('viewType', newView)
-                  setViewType(newView)
-                }}
+            {isProviderView ? (
+              <Link
+                className='px-2 flex items-center justify-center font-bold border border-white rounded text-white mr-2 mb-2 md:mb-0 h-[2rem] w-[12rem]'
+                to='/addpatient'
               >
-                Change to {isProviderView ? 'pharmacist' : 'provider'} view
-              </button>
+                Add a new patient
+              </Link>
+            ) : null}
+
+            <div>
+              <button
+                  className='flex items-center px-2 font-bold rounded border border-white text-white mr-2 text-center h-[2rem] w-[15rem] justify-center'
+                  onClick={() => {
+                    const newView = isProviderView ? 'pharmacist' : 'provider'
+                    sessionStorage.setItem('viewType', newView)
+                    setViewType(newView)
+                  }}
+                >
+                  Change to {isProviderView ? 'pharmacist' : 'provider'} view
+                </button>
+              </div>
             </div>
         </div>
 

@@ -1,8 +1,8 @@
-import { Patient } from '../schemas/Patient';
-import PatientForm from '../components/PatientForm';
-import { useUpdatePatient } from '../apiCalls'
 import { useState } from 'react'
 import { Navigate } from 'react-router-dom'
+import { useUpdatePatient } from '../apiCalls'
+import { Patient } from '../schemas/Patient';
+import PatientForm from '../components/PatientForm';
 
 interface Props {
     refetchPatient: () => void
@@ -35,9 +35,9 @@ const EditPatientModal = ({ setShowModal, refetchPatient }: Props) => {
     }
 
     return (
-        <div className="absolute z-10 bg-white rounded md:h-[70%] w-[70%] top-2 border-2 border-teal-700">
+        <div className='fixed z-10 bg-white rounded md:max-h-[480px] w-[300px] md:left-[25%] md:w-[400px] top-2 border-2 border-teal-700'>
             <button
-                className="absolute right-4 top-2 font-bold"
+                className='absolute right-4 top-2 font-bold'
                 onClick={setShowModal}
             >
                 X

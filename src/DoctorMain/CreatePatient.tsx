@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { Navigate } from 'react-router-dom'
 import { Patient } from '../schemas/Patient'
-import { useCreatePatient } from "../apiCalls"
-import PatientForm from "../components/PatientForm"
+import { useCreatePatient } from '../apiCalls'
+import PatientForm from '../components/PatientForm'
 
 const CreatePatient = () => {
     const [formData, setFormData] = useState<Patient>({
@@ -33,7 +33,7 @@ const CreatePatient = () => {
     }
 
     return (
-        <div className="w-[80%] m-auto bg-white rounded my-10">
+        <div className='w-[80%] m-auto bg-white rounded my-10'>
             <PatientForm
                 data={formData}
                 handleChange={handleChange}

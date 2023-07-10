@@ -1,8 +1,8 @@
 import { useState } from 'react'
+import { Navigate } from 'react-router-dom'
+import { useGetPatient } from '../apiCalls'
 import PrescriptionSection from './PrescriptionSection'
 import EditPatientModal from './EditPatientModal'
-import { useGetPatient } from '../apiCalls'
-import { Navigate } from 'react-router-dom'
 
 const PatientView = () => {
     const { data, isLoading, isFetching, isError, refetch: refetchPatient } = useGetPatient()
@@ -18,12 +18,12 @@ const PatientView = () => {
      }
 
     return (
-        <div className="md:py-10 md:px-20 bg-white w-[90%] mx-auto p-6 rounded my-10">
+        <div className='md:py-10 md:px-20 bg-white w-[90%] md:w-[80%] mx-auto p-6 rounded my-10'>
 
             {showModal && <EditPatientModal refetchPatient={refetchPatient} setShowModal={() => setShowModal(false)} />}
 
-            <div className="flex">
-                <h3 className="font-bold text-lg my-4 mr-10">
+            <div className='flex'>
+                <h3 className='font-bold text-lg my-4 mr-10'>
                     Patient Info
                     <button
                         onClick={() => setShowModal(true)}
@@ -34,16 +34,16 @@ const PatientView = () => {
                 </h3>
 
                 <div>
-                    <div className="my-2">
+                    <div className='my-2'>
                         <strong>Name: </strong>{data?.firstName} {data?.lastName}
                     </div>
-                    <div className="my-2">
+                    <div className='my-2'>
                         <strong>Email: </strong>{data?.email}
                     </div>
-                    <div className="my-2">
+                    <div className='my-2'>
                         <strong>Phone number: </strong>{data?.phone}
                     </div>
-                    <div className="my-2">
+                    <div className='my-2'>
                         <strong>Last appointment: </strong> {data?.lastAppointment}
                     </div>
                 </div>

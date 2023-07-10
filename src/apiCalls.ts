@@ -1,5 +1,5 @@
 import { useQuery, useMutation } from '@tanstack/react-query'
-import { useParams, Navigate } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { Prescription } from './schemas/Prescription'
 import { Patient } from './schemas/Patient'
 
@@ -8,7 +8,7 @@ import { Patient } from './schemas/Patient'
 export const useGetPrescriptions = (searchTerm: string, offset: number, filters: string[]) => {
     return useQuery({
         queryKey: ['prescriptions', searchTerm, offset, filters],
-        queryFn: async () => {
+        queryFn: () => {
           const formattedFilters = filters.join(',').toLowerCase()
            return fetch(`http://localhost:4000/prescriptions?name=${searchTerm}&offset=${offset}&filters=${formattedFilters}`)
            .then((res) => res.json())
@@ -54,14 +54,14 @@ export const useCreatePrescription = (refetch: () => void) => useMutation({
     mutationFn: (prescriptions: Prescription): Promise<Prescription> => fetch('http://localhost:4000/prescriptions',
         {
             method: 'POST',
-            headers: { "Content-Type": "application/json" },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ prescriptions })
         }).then(res => res.json()),
     // refetch patient info
     onSuccess: () => refetch(),
 })
 
-interface UpdateArgs {
+interface UpdateScriptArgs {
     id?: string,
     name?: string,
     refills?: number,
@@ -71,16 +71,17 @@ export const useUpdatePrescription = (refetch: () => void) => {
     const params = useParams()
 
     return useMutation({
-        mutationFn: ({ status, refills, name, id }: UpdateArgs): Promise<Prescription[]> => {
+        mutationFn: ({ status, refills, name, id }: UpdateScriptArgs): Promise<Prescription[]> => {
             return fetch(`http://localhost:4000/prescriptions/${id || params.id}`, {
                 method: 'PUT',
-                headers: { "Content-Type": "application/json" },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ status, refills, name }),
             }).then(res => {
                 const data = res.json()
                 return data
             })
         },
+        // refetch the patient data, or the prescription data, depending on the origin
         onSuccess: () => refetch()
       })
 }
@@ -91,7 +92,7 @@ export const useCreatePatient = (onSuccessFn: React.Dispatch<React.SetStateActio
         mutationFn: () => fetch('http://localhost:4000/patients',
             {
                 method: 'POST',
-                headers: { "Content-Type": "application/json" },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData)
             }).then(res => res.json()),
         onSuccess: (data) => {
@@ -109,7 +110,7 @@ export const useUpdatePatient = (onSuccessFn: () => void, refetch: () => void) =
             return fetch(`http://localhost:4000/patients/${params.id}`,
                 {
                     method: 'PUT',
-                    headers: { "Content-Type": "application/json" },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(formData)
                 }
             ).then(res => res.json())

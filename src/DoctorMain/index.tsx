@@ -23,18 +23,18 @@ const DoctorMain = () => {
     const { patients = [], nextOffset = 0 } = data
 
     return (
-        <div className="w-[90%] m-auto px-4">
-            <div className="mt-4 bg-white rounded p-4 flex justify-center">
+        <div className='md:w-[80%] m-auto px-4'>
+            <div className='mt-4 bg-white rounded p-4 flex items-center justify-center'>
                 <form>
-                    <label htmlFor="search" className="mr-2">Search by last name</label>
+                    <label htmlFor='search' className='mr-2'>Search by last name</label>
                     <input
-                        id="search"
+                        id='search'
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        type="search"
+                        type='search'
                         value={searchTerm}
                     />
                     <button
-                        className="ml-2 text-white bg-teal-700 font-bold rounded px-2"
+                        className='ml-2 text-white bg-teal-700 font-bold rounded px-2'
                         onClick={() => setSearchTerm('')}
                         type='button'
                     >
@@ -54,18 +54,18 @@ const DoctorMain = () => {
                 isGoForwardDisabled={nextOffset === null}
             />
 
-            <div className="grid grid-cols-3 my-4 px-2 font-bold break-all">
-                <p>Patient name</p>
-                <p>Last appointment</p>
-                <p>Phone</p>
+            <div className='grid grid-cols-3 my-4 px-2 font-bold break-all'>
+                <p className='text-sm md:text-base'>Patient name</p>
+                <p className='text-sm md:text-base'>Last appointment</p>
+                <p className='text-sm md:text-base'>Phone</p>
             </div>
 
-            <ul className="bg-white rounded px-4">
+            <ul className='bg-white rounded px-4'>
                 {patients.map((patient: Patient, index: number) => {
                     return (
                         <li key={patient.id}>
                             <Link
-                                className={`grid grid-cols-3 justify-between py-3 ${index !== patients.length-1 ? 'border-b border-b-black' : ''}`}
+                                className={`text-sm md:text-base grid grid-cols-3 gap-2 justify-between py-3 ${index !== patients.length-1 ? 'border-b border-b-black' : ''}`}
                                 key={patient.id}
                                 to={`/patients/${patient.id}`}
                             >

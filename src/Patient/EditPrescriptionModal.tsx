@@ -1,7 +1,7 @@
-import { PrescriptionStatus } from '../schemas/Prescription'
 import { useState } from 'react'
-import { useUpdatePrescription } from '../apiCalls'
 import { Navigate } from 'react-router-dom'
+import { useUpdatePrescription } from '../apiCalls'
+import { PrescriptionStatus } from '../schemas/Prescription'
 
 interface Props {
     hideModal: () => void
@@ -29,10 +29,10 @@ const EditPrescriptionModal = ({ hideModal, refetchPatient, script }: Props) => 
 
     return (
         <div
-            className="absolute z-10 bg-white rounded max-h-[380px] w-[300px] md:w-[400px] md:left-[30%] top-2 border-2 border-teal-700"
+            className='fixed z-10 bg-white rounded max-h-[380px] w-[300px] md:w-[400px] md:left-[30%] top-2 border-2 border-teal-700'
         >
             <button
-                className="absolute right-4 top-2 font-bold"
+                className='absolute right-4 top-2 font-bold'
                 onClick={hideModal}
             >
                 X
@@ -49,38 +49,38 @@ const EditPrescriptionModal = ({ hideModal, refetchPatient, script }: Props) => 
                     })
                 }}
             >
-                <h3 className="font-bold text-lg mb-4 text-center">Prescription Information</h3>
+                <h3 className='font-bold text-lg mb-4 text-center'>Prescription Information</h3>
                 {isProviderView ?
                     <>
-                        <div className="mb-4 flex justify-between flex-col md:flex-row items-center">
-                            <label className="md:mr-3" htmlFor="scriptName">Prescription Name</label>
+                        <div className='mb-4 flex justify-between flex-col md:flex-row items-center'>
+                            <label className='md:mr-3' htmlFor='scriptName'>Prescription Name</label>
                             <input
-                                className="md:w-[50%]"
-                                id="scriptName"
-                                name="scriptName"
+                                className='md:w-[50%]'
+                                id='scriptName'
+                                name='scriptName'
                                 onChange={(e) => setEditedScript({ ...editedScript, name: e.target.value })}
-                                type="text"
+                                type='text'
                                 value={editedScript.name}
                             />
                         </div>
 
-                        <div className="mb-4 flex justify-between flex-col md:flex-row items-center">
-                            <label className="md:mr-3" htmlFor="refills">Refills</label>
+                        <div className='mb-4 flex justify-between flex-col md:flex-row items-center'>
+                            <label className='md:mr-3' htmlFor='refills'>Refills</label>
                             <input
-                                className="md:w-[50%]"
-                                id="refills"
-                                name="refills"
+                                className='md:w-[50%]'
+                                id='refills'
+                                name='refills'
                                 onChange={(e) => setEditedScript({ ...editedScript, refills: Math.max(0, Number(e.target.value)) })}
-                                type="number"
+                                type='number'
                                 value={editedScript.refills}
                             />
                         </div>
                     </> : (
                         <div>
-                            <label className="mr-3" htmlFor="status">Fulfillment Status</label>
+                            <label className='mr-3' htmlFor='status'>Fulfillment Status</label>
                             <select
-                                id="status"
-                                name="status"
+                                id='status'
+                                name='status'
                                 onChange={(e) => setEditedScript({ ...editedScript, status: e.target.value })}
                                 value={editedScript.status || ''}
                             >
@@ -92,17 +92,17 @@ const EditPrescriptionModal = ({ hideModal, refetchPatient, script }: Props) => 
                     )
                 }
 
-                    <div className="flex flex-col items-center mt-10">
+                    <div className='flex flex-col items-center mt-10'>
                         <button
                             className='px-4 py-2 font-bold rounded text-white bg-teal-700'
-                            type="submit"
+                            type='submit'
                         >
                             Update Prescription
                         </button>
                         <button
                             className='px-4 py-1 mt-2 font-bold rounded text-white bg-rose-600'
                             onClick={hideModal}
-                            type="button"
+                            type='button'
                         >
                             Cancel
                         </button>

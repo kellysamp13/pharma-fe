@@ -6,8 +6,8 @@ import { useGetPrescription, useUpdatePrescription } from '../apiCalls'
 const PrescriptionView = () => {
     const [status, setStatus] = useState<PrescriptionStatus | null>(null)
 
-    const { data, isLoading, isFetching, isError, refetch } = useGetPrescription()
-    const mutation = useUpdatePrescription(refetch)
+    const { data, isLoading, isFetching, isError, refetch: refetchScript } = useGetPrescription()
+    const mutation = useUpdatePrescription(refetchScript)
 
     const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         mutation.mutate({ status: e.target.value })
@@ -28,14 +28,14 @@ const PrescriptionView = () => {
      }
 
     return (
-        <div className="py-10 px-20 bg-white w-[90%] mx-auto p-6 rounded my-10">
-            <form className="flex justify-between mb-4">
+        <div className='py-10 px-20 bg-white w-[80%] mx-auto p-6 rounded my-10'>
+            <form className='flex justify-between mb-4'>
                 <div>Prescription: {data?.name}</div>
                 <div>
-                    <label className="mr-3" htmlFor="status">Fulfillment Status</label>
+                    <label className='mr-3' htmlFor='status'>Fulfillment Status</label>
                     <select
-                        id="status"
-                        name="status"
+                        id='status'
+                        name='status'
                         onChange={handleChange}
                         value={status || ''}
                     >
@@ -48,7 +48,7 @@ const PrescriptionView = () => {
             </form>
 
             <Link
-                className="text-teal-700 font-bold"
+                className='text-teal-700 font-bold'
                 to={`/patients/${data?.userId}`}
             >
                 View Patient Info

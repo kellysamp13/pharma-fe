@@ -1,11 +1,10 @@
-import AddPrescriptionForm from '../components/AddPrescriptionForm'
+import { useState } from 'react'
+import { useParams, Navigate } from 'react-router-dom'
+import { useCreatePrescription } from '../apiCalls'
 import { Prescription, PrescriptionStatus } from '../schemas/Prescription'
 import { Patient } from '../schemas/Patient'
-import { useState } from 'react'
-import { useParams } from 'react-router-dom'
-import { useCreatePrescription } from '../apiCalls'
+import AddPrescriptionForm from '../components/AddPrescriptionForm'
 import EditPrescriptionModal from './EditPrescriptionModal'
-import { Navigate } from 'react-router-dom'
 
 interface Props {
     patientData: Patient | null
@@ -65,15 +64,15 @@ const PrescriptionSection = ({ patientData, refetchPatient }: Props) => {
                 />
             ) : null}
 
-            <h3 className="font-bold text-lg my-4">Active Prescriptions</h3>
-            <ul className="border-t border-t-black">
+            <h3 className='font-bold text-lg my-4'>Active Prescriptions</h3>
+            <ul className='border-t border-t-black'>
                 {patientData?.activeScripts?.length ? patientData?.activeScripts.map((script: Prescription) => {
                     return (
                         <li
                             key={script.id}
                             className={`flex justify-between items-center mb-2 py-2 border-b border-b-black`}
                         >
-                            <div className="w-[80%] md:grid md:grid-cols-4 md:gap-4">
+                            <div className='w-[80%] md:grid md:grid-cols-4 md:gap-4'>
                                 <div>{script.name}</div>
                                 <div>{script.status}</div>
                                 <div>Refills: {script.refills}</div>
@@ -87,7 +86,7 @@ const PrescriptionSection = ({ patientData, refetchPatient }: Props) => {
                                         name: script.name,
                                         id: script.id,
                                         refills: script.refills,
-                                        status: '',
+                                        status: script.status,
                                     })
                                 }}
                             >
@@ -95,18 +94,18 @@ const PrescriptionSection = ({ patientData, refetchPatient }: Props) => {
                             </button>
                         </li>
                     )
-                }): <li>No active prescriptions.</li>}
+                }): <li className='py-2'>No active prescriptions.</li>}
             </ul>
 
-            <h3 className="font-bold text-lg my-4">Expired Prescriptions</h3>
-            <ul className="border-t border-t-black">
+            <h3 className='font-bold text-lg my-4'>Expired Prescriptions</h3>
+            <ul className='border-t border-t-black'>
                 {patientData?.expiredScripts?.length ? patientData?.expiredScripts?.map((script: Prescription) => {
                     return (
                         <li
                             key={script.id}
                             className={`flex justify-between items-center mb-2 py-2 border-b border-b-black`}
                         >
-                            <div className="w-[80%] md:grid md:grid-cols-4">
+                            <div className='w-[80%] md:grid md:grid-cols-4'>
                                 <div>{script.name}</div>
                                 <div>{script.status}</div>
                                 <div>Refills: {script.refills}</div>
@@ -127,11 +126,11 @@ const PrescriptionSection = ({ patientData, refetchPatient }: Props) => {
                             </button>
                         </li>
                     )
-                }): <li>No expired prescriptions.</li>}
+                }): <li className='py-2'>No expired prescriptions.</li>}
             </ul>
 
             {isProviderView ? <>
-                <h3 className="font-bold text-lg my-4">
+                <h3 className='font-bold text-lg my-4'>
                     Add New Prescription
                     <button
                         className='px-4 text-sm py-1 font-bold rounded text-white bg-teal-700 ml-3'

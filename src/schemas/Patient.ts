@@ -10,7 +10,7 @@ const PatientSchema = z.object({
     id: z.string().optional(),
     lastAppointment: z.string().nullable(),
     lastName: z.string(),
-    phone: z.string(),
+    phone: z.string().length(10),
     // a patient profile can exist with no prescriptions
     prescriptions: z.array(PrescriptionSchema).optional(),
 })

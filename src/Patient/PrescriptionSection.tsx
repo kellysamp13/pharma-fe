@@ -3,7 +3,8 @@ import { Prescription, PrescriptionStatus } from '../schemas/Prescription'
 import { Patient } from '../schemas/Patient'
 import { useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { useCreatePrescription } from './apiCalls'
+import { useCreatePrescription } from '../apiCalls'
+import EditPrescriptionModal from './EditPrescriptionModal'
 
 interface Props {
     patientData: Patient | null
@@ -22,20 +23,41 @@ const PrescriptionSection = ({ patientData, refetchPatient }: Props) => {
         userId: String(params.id || ''),
     })
 
-    const mutation = useCreatePrescription(refetchPatient)
+    const [expandedAdd, setExpandedAdd] = useState(false)
+    const [showModal, setShowModal] = useState(false)
+    const [editedScript, setEditedScript] = useState({
+        name: '',
+        id: '',
+        refills: 0,
+    })
+
+    const createScriptMutation = useCreatePrescription(refetchPatient)
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        mutation.mutate(prescriptions)
+        createScriptMutation.mutate(prescriptions)
     }
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         setPrescriptions({...prescriptions, [e.target.name]: e.target.value})
     }
 
-    const [expandedAdd, setExpandedAdd] = useState(false)
-
     return (
         <>
+            {showModal ? (
+                <EditPrescriptionModal
+                    script={editedScript}
+                    hideModal={() => {
+                        setShowModal(false)
+                        setEditedScript({
+                            name: '',
+                            id: '',
+                            refills: 0,
+                        })
+                    }}
+                    refetchPatient={refetchPatient}
+                />
+            ) : null}
+
             <h3 className="font-bold text-lg my-4">Active Prescriptions</h3>
             <ul>
                 {patientData?.activeScripts?.length ? patientData?.activeScripts.map((script: Prescription) => {
@@ -44,8 +66,19 @@ const PrescriptionSection = ({ patientData, refetchPatient }: Props) => {
                             <div>{script.name}</div>
                             <div>{script.status}</div>
                             <div>Refills: {script.refills}</div>
-                            {/* editing means ending refills - not updating any other info */}
-                            <button className='px-4 text-sm py-1 font-bold rounded text-white bg-teal-600'>Edit</button>
+                            <button
+                                className='px-4 text-sm py-1 font-bold rounded text-white bg-teal-600'
+                                onClick={() => {
+                                    setShowModal(true)
+                                    setEditedScript({
+                                        name: script.name,
+                                        id: script.id,
+                                        refills: script.refills,
+                                    })
+                                }}
+                            >
+                                Edit
+                            </button>
                         </li>
                     )
                 }): <div>No active prescriptions.</div>}
@@ -59,14 +92,24 @@ const PrescriptionSection = ({ patientData, refetchPatient }: Props) => {
                             <div>{script.name}</div>
                             <div>{script.status}</div>
                             <div>Refills: {script.refills}</div>
-                            {/* editing means ending refills - not updating any other info */}
-                            <button className='px-4 text-sm py-1 font-bold rounded text-white bg-teal-600'>Edit</button>
+                            <button
+                                className='px-4 text-sm py-1 font-bold rounded text-white bg-teal-600'
+                                onClick={() => {
+                                    setShowModal(true)
+                                    setEditedScript({
+                                        name: script.name,
+                                        id: script.id,
+                                        refills: script.refills,
+                                    })
+                                }}
+                            >
+                                Edit
+                            </button>
                         </li>
                     )
                 }): <div>No expired prescriptions.</div>}
             </ul>
 
-            {/* show this section with a button */}
             {isProviderView ? <>
                 <h3 className="font-bold text-lg my-4">
                     Add New Prescription

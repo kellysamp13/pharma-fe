@@ -1,12 +1,11 @@
 import { useState } from 'react'
 import{ Link }from 'react-router-dom'
 import { Patient } from '../schemas/Patient'
-import { useGetPatients } from './apiCalls'
+import { useGetPatients } from '../apiCalls'
 import ListViewControls from '../components/ListViewControls'
 import { useDebounce } from '../utils'
 
 const DoctorMain = () => {
-    // ON CLICKING VIEW ALL
     const [searchTerm, setSearchTerm] = useState('')
     const [offset, setOffset] = useState(0)
     const debouncedSearchTerm = useDebounce(searchTerm)
@@ -52,8 +51,8 @@ const DoctorMain = () => {
 
             <div className="grid grid-cols-3 my-4 px-2 font-bold break-all">
                 <p>Patient name</p>
-                <p>Prescriptions</p>
                 <p>Last appointment</p>
+                <p>Phone</p>
             </div>
 
             <ul className="bg-white rounded px-4">
@@ -65,8 +64,8 @@ const DoctorMain = () => {
                                 key={patient.id}
                             >
                                 <div>{patient.firstName} {patient.lastName}</div>
-                                <div>{patient.prescriptions?.length || 0}</div>
                                 <div>{patient.lastAppointment}</div>
+                                <div>{patient.phone}</div>
                             </li>
                         </Link>
                     )

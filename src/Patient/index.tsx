@@ -1,9 +1,7 @@
-import { Navigate, useParams } from 'react-router-dom'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import PrescriptionSection from './PrescriptionSection'
 import EditPatientModal from './EditPatientModal'
-import { useGetPatient } from './apiCalls'
-import { Patient } from '../schemas/Patient'
+import { useGetPatient } from '../apiCalls'
 
 const PatientView = () => {
     const { data, isLoading, isFetching, refetch: refetchPatient } = useGetPatient()

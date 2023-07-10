@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Navigate } from 'react-router-dom'
 import { Patient } from '../schemas/Patient'
-import { useCreatePatient } from "../Patient/apiCalls"
+import { useCreatePatient } from "../apiCalls"
 import PatientForm from "../components/PatientForm"
 
 const CreatePatient = () => {

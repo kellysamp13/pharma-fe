@@ -1,16 +1,16 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import './App.css'
-import CreatePatient from "./DoctorMain/CreatePatient"
-import DoctorMain from './DoctorMain';
-import PatientView from './Patient'
-import {Link} from 'react-router-dom'
-import PharmacistMain from './PharmacistMain';
 import { useState } from 'react'
-import PrescriptionView from './PharmacistMain/PrescriptionView';
+import { Link } from 'react-router-dom'
 import {
   QueryClient,
   QueryClientProvider,
 } from '@tanstack/react-query'
+
+import CreatePatient from "./DoctorMain/CreatePatient"
+import DoctorMain from './DoctorMain';
+import PatientView from './Patient'
+import PharmacistMain from './PharmacistMain';
+import PrescriptionView from './PharmacistMain/PrescriptionView';
 
 const queryClient = new QueryClient()
 

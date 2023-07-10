@@ -80,8 +80,6 @@ const PatientForm = ({
                     type="tel"
                     value={phone}
                 />
-                {/* whats the best practice for format info? */}
-                {/* <p className="absolute right-0 bottom-[-50%] text-xs">Format: 123-456-7890</p> */}
             </div>
 
             <div className="mb-4 flex justify-between flex-col md:flex-row items-center">

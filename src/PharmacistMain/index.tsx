@@ -1,6 +1,6 @@
 import { Prescription } from '../schemas/Prescription'
 import { Link } from 'react-router-dom'
-import { useGetPrescriptions } from './apiCalls'
+import { useGetPrescriptions } from '../apiCalls'
 import { useState } from 'react'
 import ListViewControls from '../components/ListViewControls'
 import { useDebounce } from '../utils'

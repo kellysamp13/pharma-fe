@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { PrescriptionStatus } from '../schemas/Prescription'
-import { useGetPrescription, useMutatePrescription } from './apiCalls'
+import { useGetPrescription, useUpdatePrescription } from '../apiCalls'
 
 const PrescriptionView = () => {
     const [status, setStatus] = useState<PrescriptionStatus | null>(null)
 
     const { data, refetch } = useGetPrescription()
-    const mutation = useMutatePrescription(refetch)
+    const mutation = useUpdatePrescription(refetch)
 
     const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        mutation.mutate(e.target.value)
+        mutation.mutate({ status: e.target.value })
     }
 
     useEffect(() => {

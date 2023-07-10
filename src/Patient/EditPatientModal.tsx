@@ -1,6 +1,6 @@
 import { Patient } from '../schemas/Patient';
 import PatientForm from '../components/PatientForm';
-import { useUpdatePatient } from './apiCalls'
+import { useUpdatePatient } from '../apiCalls'
 import { useState } from 'react'
 
 interface Props {
